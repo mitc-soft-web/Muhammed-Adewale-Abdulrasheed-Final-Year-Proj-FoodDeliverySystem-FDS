@@ -1,0 +1,926 @@
+﻿@model FoodDeliverySystem.ViewModels.RiderDashboardViewModel
+
+@{
+    ViewData["Title"] = "Rider Dashboard";
+}
+
+<div class="container-fluid mt-4">
+
+    <!-- HERO SECTION -->
+
+    <div class="card border-0 shadow-lg mb-4"
+         style="border-radius:20px;
+        background:linear-gradient(90deg,#ff6b35,#ff9f1c);">
+
+        <div class="card-body p-5 text-white">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-8">
+
+                    <h2 class="fw-bold">
+
+                         Welcome Back,
+                        @Model.Rider.User?.FullName
+
+                    </h2>
+
+                    <p class="mb-4 fs-5">
+
+                        Ready to deliver happiness today?
+
+                    </p>
+
+                    @if (Model.Rider.IsAvailable)
+                    {
+                        <span class="badge bg-success px-4 py-3 fs-6">
+
+                            🟢 AVAILABLE
+
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger px-4 py-3 fs-6">
+
+                            🔴 OFFLINE
+
+                        </span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4 text-center">
+
+                    <img src="https://cdn-icons-png.flaticon.com/512/1048/1048314.png"
+                         style="width:150px;" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-3 mb-3">
+
+            <a asp-action="AssignedOrders"
+               class="text-decoration-none">
+
+                <div class="card shadow border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h1>📦</h1>
+
+                        <h5>Assigned Orders</h5>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <a asp-action="DeliveryHistory"
+               class="text-decoration-none">
+
+                <div class="card shadow border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h1>📜</h1>
+
+                        <h5>Delivery History</h5>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <a asp-action="Profile"
+               class="text-decoration-none">
+
+                <div class="card shadow border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h1>👤</h1>
+
+                        <h5>Profile</h5>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            @if (Model.Rider.IsAvailable)
+            {
+                <a asp-action="ToggleAvailability"
+                   class="text-decoration-none">
+
+                    <div class="card shadow border-success h-100">
+
+                        <div class="card-body text-center">
+
+                            <h1>🟢</h1>
+
+                            <h5>Go Offline</h5>
+
+                        </div>
+
+                    </div>
+
+                </a>
+            }
+            else
+            {
+                <a asp-action="ToggleAvailability"
+                   class="text-decoration-none">
+
+                    <div class="card shadow border-danger h-100">
+
+                        <div class="card-body text-center">
+
+                            <h1>🔴</h1>
+
+                            <h5>Go Available</h5>
+
+                        </div>
+
+                    </div>
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- STATISTICS -->
+
+    <div class="row">
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h1>🆕</h1>
+
+                    <h3>@Model.NewOrders</h3>
+
+                    <p class="text-muted mb-0">
+
+                        New Orders
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h1>🚚</h1>
+
+                    <h3>@Model.ActiveOrders</h3>
+
+                    <p class="text-muted mb-0">
+
+                        Active Deliveries
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h1>✅</h1>
+
+                    <h3>@Model.CompletedDeliveries</h3>
+
+                    <p class="text-muted mb-0">
+
+                        Completed
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h1>💰</h1>
+
+                    <h3>
+
+                        ₦@Model.TotalEarnings.ToString("N0")
+
+                    </h3>
+
+                    <p class="text-muted mb-0">
+
+                        Total Earnings
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- EARNINGS ANALYTICS -->
+
+    <div class="card shadow-lg border-0 mb-4"
+         style="border-radius:18px;">
+
+        <div class="card-body">
+
+            <h4 class="fw-bold mb-4">
+
+                💰 Earnings Analytics
+
+            </h4>
+
+            <div class="row">
+
+                <div class="col-md-3 mb-3">
+
+                    <div class="card border-success shadow-sm">
+
+                        <div class="card-body text-center">
+
+                            <h6 class="text-muted">
+
+                                Cash Collected
+
+                            </h6>
+
+                            <h3 class="text-success">
+
+                                ₦@Model.CashCollected.ToString("N0")
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <div class="card border-primary shadow-sm">
+
+                        <div class="card-body text-center">
+
+                            <h6 class="text-muted">
+
+                                Online Payments
+
+                            </h6>
+
+                            <h3 class="text-primary">
+
+                                ₦@Model.OnlineCollected.ToString("N0")
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <div class="card border-warning shadow-sm">
+
+                        <div class="card-body text-center">
+
+                            <h6 class="text-muted">
+
+                                Today's Earnings
+
+                            </h6>
+
+                            <h3 class="text-warning">
+
+                                ₦@Model.TodayEarnings.ToString("N0")
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <div class="card border-dark shadow-sm">
+
+                        <div class="card-body text-center">
+
+                            <h6 class="text-muted">
+
+                                Today's Deliveries
+
+                            </h6>
+
+                            <h3>
+
+                                @Model.TodayDeliveries
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ACTIVE DELIVERIES -->
+    @if (Model.ActiveDeliveries.Any())
+    {
+        <div class="card border-0 shadow-lg mb-4"
+             style="border-radius:18px;">
+
+            <div class="card-body">
+
+                <h4 class="fw-bold mb-4">
+
+                    🚚 Active Deliveries
+
+                </h4>
+
+                <div class="row">
+
+                    @foreach (var order in Model.ActiveDeliveries)
+                    {
+                        <div class="col-lg-6 mb-4">
+
+                            <div class="card shadow-sm border-primary h-100">
+
+                                <div class="card-body">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <h5>
+
+                                            📦 Order #@order.Id
+
+                                        </h5>
+
+                                        <span class="badge bg-primary">
+
+                                            @order.Status
+
+                                        </span>
+
+                                    </div>
+
+                                    <hr />
+
+                                    <p>
+
+                                        <strong>👤 Customer:</strong>
+
+                                        @order.Customer?.FullName
+
+                                    </p>
+
+                                    <p>
+                                        <strong>📞 Phone:</strong>
+
+                                        <a href="tel:@order.PhoneNumber">
+
+                                            @order.PhoneNumber
+
+                                        </a>
+
+                                    </p>
+
+                                    <p>
+
+                                        <strong>📍 Address:</strong>
+
+                                        @order.DeliveryAddress
+
+                                    </p>
+
+                                    <p>
+
+                                        <strong>💳 Payment:</strong>
+
+                                        @if (order.PaymentMethod == "Cash on Delivery")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+
+                                                💵 Cash on Delivery
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+
+                                                💳 Paid Online
+
+                                            </span>
+                                        }
+
+                                    </p>
+
+                                    <a asp-action="OrderDetails"
+                                       asp-route-id="@order.Id"
+                                       class="btn btn-primary w-100">
+
+                                        📦 View Order
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-success shadow-sm">
+
+            🎉 No active deliveries.
+
+        </div>
+    }
+
+    <!-- RECENT DELIVERIES -->
+
+    <div class="card shadow-lg border-0 mb-4"
+         style="border-radius:18px;">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h4 class="fw-bold mb-0">
+
+                    📜 Recent Deliveries
+
+                </h4>
+
+                <a asp-action="DeliveryHistory"
+                   class="btn btn-outline-primary btn-sm">
+
+                    View Full History →
+
+                </a>
+
+            </div>
+
+            @if (Model.RecentDeliveries.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>Order</th>
+
+                                <th>Customer</th>
+
+                                <th>Payment</th>
+
+                                <th>Amount</th>
+
+                                <th>Date</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var order in Model.RecentDeliveries)
+                            {
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+
+                                            #@order.Id
+
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        @order.Customer?.FullName
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (order.PaymentMethod == "Cash on Delivery")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+
+                                                💵 Cash
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+
+                                                💳 Online
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="fw-bold text-success">
+
+                                        ₦@order.TotalAmount.ToString("N0")
+
+                                    </td>
+
+                                    <td>
+
+                                        @order.OrderDate.ToString("dd MMM")
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-light">
+
+                    No deliveries yet.
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- PERFORMANCE -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">
+
+                        🏆 Rider Performance
+
+                    </h5>
+
+                    <div class="progress mb-3"
+                         style="height:28px;">
+
+                        <div class="progress-bar bg-success"
+                             style="width:100%;">
+
+                            Excellent Performance
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+
+                        Deliveries completed successfully.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">
+
+                        🔔 Notifications
+
+                    </h5>
+
+                    <ul class="list-group list-group-flush">
+
+                        @if (Model.NewOrders > 0)
+                        {
+                            <li class="list-group-item">
+
+                                📦
+
+                                You have
+
+                                <strong>
+
+                                    @Model.NewOrders
+
+                                </strong>
+
+                                order(s) waiting.
+
+                            </li>
+                        }
+
+                        @if (Model.ActiveOrders > 0)
+                        {
+                            <li class="list-group-item">
+
+                                🚚
+
+                                Continue your active deliveries.
+
+                            </li>
+                        }
+
+                        @if (Model.TodayDeliveries > 0)
+                        {
+                            <li class="list-group-item">
+
+                                🎉
+
+                                Great work today!
+
+                            </li>
+                        }
+
+                        @if (Model.NewOrders == 0 &&
+                            Model.ActiveOrders == 0)
+                        {
+                            <li class="list-group-item">
+
+                                😎
+
+                                You're all caught up.
+
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- LIVE TRACKING MAP -->
+     <div id="riderMap"
+             style="height:500px;
+            width:100%;
+            margin-top:30px;
+            border-radius:12px;">
+        </div>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- SignalR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+
+<script>
+
+    let map;
+    let riderMarker;
+
+    // CREATE MAP
+    map = L.map('riderMap').setView(
+    [6.4474,3.3903],
+    15
+    );
+
+    L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+    attribution:'© OpenStreetMap contributors'
+    }
+    ).addTo(map);
+
+    // CREATE RIDER MARKER
+    riderMarker = L.marker(
+    [6.4474,3.3903]
+    )
+    .addTo(map)
+    .bindPopup("🛵 Rider")
+    .openPopup();
+
+    // SIGNALR CONNECTION
+    const connection =
+    new signalR.HubConnectionBuilder()
+    .withUrl("/trackingHub")
+    .withAutomaticReconnect()
+    .build();
+
+    connection.start()
+
+    .then(function(){
+
+    console.log("✅ Rider connected to SignalR");
+
+    @if (ViewBag.TrackingEnabled == true)
+    {
+        <text>
+            startGPS();
+        </text>
+    }
+    else
+    {
+        <text>
+            console.log("No active order. GPS disabled.");
+        </text>
+    }
+
+    })
+
+    .catch(function(err){
+
+    console.error(err);
+
+    });
+
+    // START GPS TRACKING
+    function startGPS(){
+
+    if(!navigator.geolocation){
+
+    alert("GPS not supported");
+    return;
+
+    }
+
+    navigator.geolocation.watchPosition(
+
+    function(position){
+
+    let latitude =
+    position.coords.latitude;
+
+    let longitude =
+    position.coords.longitude;
+
+    let accuracy =
+    position.coords.accuracy;
+
+    console.log("Latitude:",latitude);
+    console.log("Longitude:",longitude);
+    console.log("Accuracy:",accuracy);
+
+    // UPDATE MAP MARKER
+    riderMarker.setLatLng(
+    [
+    latitude,
+    longitude
+    ]
+    );
+
+    map.setView(
+    [
+    latitude,
+    longitude
+    ],
+    16
+    );
+
+    // SEND LOCATION TO SERVER
+    connection.invoke(
+    "UpdateLocation",
+    latitude,
+    longitude
+    )
+    .then(() => {
+
+    console.log(
+    "✅ Location sent to active deliveries"
+    );
+
+    })
+    .catch(err => {
+
+    console.error(
+    "Location sending failed:",
+    err
+    );
+
+    });
+
+    },
+
+    function(error){
+
+    console.log(error);
+
+    },
+
+
+    {
+
+    enableHighAccuracy:true,
+
+    maximumAge:0,
+
+    timeout:10000
+
+    }
+
+    );
+
+    }
+</script>

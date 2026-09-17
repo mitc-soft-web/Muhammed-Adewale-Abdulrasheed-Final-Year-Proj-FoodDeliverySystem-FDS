@@ -1,0 +1,671 @@
+﻿@model FoodDeliverySystem.Models.Payment
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<div class="payment-details-hero">
+
+    <div>
+
+        <div class="payment-details-label">
+
+            PAYMENT DETAILS
+
+        </div>
+
+        <h1 class="payment-details-title">
+
+            Payment #@Model.Id
+
+        </h1>
+
+        <div class="payment-details-date">
+
+            @Model.PaymentDate.ToString("dd MMM yyyy")
+
+            <span class="payment-details-dot"></span>
+
+            @Model.PaymentDate.ToString("hh:mm tt")
+
+        </div>
+
+    </div>
+
+    <div class="payment-details-actions">
+
+        @if (Model.PaymentStatus == "Paid")
+        {
+            <span class="payment-status paid">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+                Paid
+
+            </span>
+        }
+        else if (Model.PaymentStatus == "Pending")
+        {
+            <span class="payment-status pending">
+
+                <i class="bi bi-hourglass-split"></i>
+
+                Pending
+
+            </span>
+        }
+        else if (Model.PaymentStatus == "Pending Collection")
+        {
+            <span class="payment-status collection">
+
+                <i class="bi bi-wallet2"></i>
+
+                Pending Collection
+
+            </span>
+        }
+        else
+        {
+            <span class="payment-status failed">
+
+                <i class="bi bi-x-circle-fill"></i>
+
+                Payment Failed
+
+            </span>
+        }
+
+    </div>
+
+</div>
+
+<div class="payment-details-grid">
+
+    <!-- Payment Information -->
+
+    <div class="payment-details-card">
+
+        <div class="payment-card-title">
+
+            <i class="bi bi-credit-card-2-front"></i>
+
+            <span>Payment Information</span>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Payment ID</span>
+
+            <strong>#@Model.Id</strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Order ID</span>
+
+            <strong>#@Model.OrderId</strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Method</span>
+
+            <strong>@Model.PaymentMethod</strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Reference</span>
+
+            <strong>
+
+                @(string.IsNullOrWhiteSpace(Model.PaymentReference)
+                    ? "N/A"
+                    : Model.PaymentReference)
+
+            </strong>
+
+        </div>
+
+    </div>
+
+    <!-- Customer -->
+
+    <div class="payment-details-card">
+
+        <div class="payment-card-title">
+
+            <i class="bi bi-person-circle"></i>
+
+            <span>Customer</span>
+
+        </div>
+
+        <h4>
+
+            @Model.Order?.Customer?.FullName
+
+        </h4>
+
+        <p>
+
+            <i class="bi bi-envelope"></i>
+
+            @Model.Order?.Customer?.Email
+
+        </p>
+
+        <p>
+
+            <i class="bi bi-telephone"></i>
+
+            @Model.Order?.PhoneNumber
+
+        </p>
+
+        <p>
+
+            <i class="bi bi-geo-alt"></i>
+
+            @Model.Order?.DeliveryAddress
+
+        </p>
+
+    </div>
+
+    <!-- Restaurant -->
+
+    <div class="payment-details-card">
+
+        <div class="payment-card-title">
+
+            <i class="bi bi-shop"></i>
+
+            <span>Restaurant</span>
+
+        </div>
+
+        @{
+
+            var restaurant = Model.Order?.OrderItems.FirstOrDefault()?.FoodItem?.Restaurant;
+
+        }
+
+        @if (restaurant != null)
+        {
+            <h4>@restaurant.Name</h4>
+
+            <p>
+
+                <i class="bi bi-geo-alt"></i>
+
+                @restaurant.Address
+
+            </p>
+
+            <p>
+
+                <i class="bi bi-telephone"></i>
+
+                @restaurant.PhoneNumber
+
+            </p>
+        }
+        else
+        {
+            <p class="text-muted">
+
+                <i class="bi bi-exclamation-circle"></i>
+
+                Restaurant unavailable
+
+            </p>
+        }
+
+    </div>
+
+    <!-- Summary -->
+
+    <div class="payment-details-card">
+
+        <div class="payment-card-title">
+
+            <i class="bi bi-cash-stack"></i>
+
+            <span>Payment Summary</span>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Subtotal</span>
+
+            <strong>₦@Model.Order?.SubTotal.ToString("N0")</strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Delivery Fee</span>
+
+            <strong>₦@Model.Order?.DeliveryFee.ToString("N0")</strong>
+
+        </div>
+
+        <hr />
+
+        <div class="payment-total-row">
+
+            <span>Total Paid</span>
+
+            <strong>
+
+                ₦@Model.Amount.ToString("N0")
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="payment-details-grid">
+
+    <!-- Payment Activity -->
+
+    <div class="payment-details-card">
+
+        <div class="payment-card-title">
+
+            <i class="bi bi-clock-history"></i>
+
+            <span>Payment Activity</span>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Payment Date</span>
+
+            <strong>
+
+                @Model.PaymentDate.ToString("dd MMM yyyy")
+
+            </strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Time</span>
+
+            <strong>
+
+                @Model.PaymentDate.ToString("hh:mm tt")
+
+            </strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Status</span>
+
+            <strong>
+
+                @Model.PaymentStatus
+
+            </strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Method</span>
+
+            <strong>
+
+                @Model.PaymentMethod
+
+            </strong>
+
+        </div>
+
+    </div>
+
+    <!-- Transaction Information -->
+
+    <div class="payment-details-card">
+
+        <div class="payment-card-title">
+
+            <i class="bi bi-receipt"></i>
+
+            <span>Transaction Information</span>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Reference</span>
+
+            <strong>
+
+                @(string.IsNullOrWhiteSpace(Model.PaymentReference)
+                    ? "Not Available"
+                    : Model.PaymentReference)
+
+            </strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Expires</span>
+
+            <strong>
+
+                @Model.ExpiresAt.ToString("dd MMM yyyy")
+
+            </strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Expiry Time</span>
+
+            <strong>
+
+                @Model.ExpiresAt.ToString("hh:mm tt")
+
+            </strong>
+
+        </div>
+
+        <div class="payment-info-row">
+
+            <span>Expired</span>
+
+            <strong>
+
+                @(Model.IsExpired ? "Yes" : "No")
+
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="payment-timeline-card">
+
+        <div class="payment-card-title">
+
+            <i class="bi bi-clock-history"></i>
+
+            <span>Payment Timeline</span>
+
+        </div>
+
+        <div class="payment-timeline">
+
+            <div class="payment-timeline-item completed">
+
+                <div class="payment-timeline-icon">
+
+                    <i class="bi bi-receipt"></i>
+
+                </div>
+
+                <div>
+
+                    <h6>
+
+                        Payment Created
+
+                    </h6>
+
+                    <small>
+
+                        @Model.PaymentDate.ToString("dd MMM yyyy • hh:mm tt")
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            @if (Model.PaymentStatus == "Pending")
+            {
+                <div class="payment-timeline-item active">
+
+                    <div class="payment-timeline-icon">
+
+                        <i class="bi bi-hourglass-split"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6>
+
+                            Awaiting Customer Payment
+
+                        </h6>
+
+                        <small>
+
+                            Waiting for payment confirmation
+
+                        </small>
+
+                    </div>
+
+                </div>
+            }
+
+            @if (Model.PaymentStatus == "Pending Collection")
+            {
+                <div class="payment-timeline-item active">
+
+                    <div class="payment-timeline-icon">
+
+                        <i class="bi bi-wallet2"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6>
+
+                            Pending Collection
+
+                        </h6>
+
+                        <small>
+
+                            Awaiting cash collection
+
+                        </small>
+
+                    </div>
+
+                </div>
+            }
+
+            @if (Model.PaymentStatus == "Paid")
+            {
+                <div class="payment-timeline-item completed">
+
+                    <div class="payment-timeline-icon">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6>
+
+                            Payment Confirmed
+
+                        </h6>
+
+                        <small>
+
+                            Transaction completed successfully
+
+                        </small>
+
+                    </div>
+
+                </div>
+            }
+
+            @if (Model.PaymentStatus == "Payment Failed")
+            {
+                <div class="payment-timeline-item failed">
+
+                    <div class="payment-timeline-icon">
+
+                        <i class="bi bi-x-circle-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6>
+
+                            Payment Failed
+
+                        </h6>
+
+                        <small>
+
+                            Transaction could not be completed
+
+                        </small>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <div class="payment-overview-card">
+
+        <div class="payment-card-title">
+
+            <i class="bi bi-info-circle"></i>
+
+            <span>Payment Overview</span>
+
+        </div>
+
+        <div class="payment-overview-grid">
+
+            <div class="payment-overview-item">
+
+                <span>Status</span>
+
+                <strong>@Model.PaymentStatus</strong>
+
+            </div>
+
+            <div class="payment-overview-item">
+
+                <span>Payment Method</span>
+
+                <strong>@Model.PaymentMethod</strong>
+
+            </div>
+
+            <div class="payment-overview-item">
+
+                <span>Reference</span>
+
+                <strong>
+
+                    @(string.IsNullOrWhiteSpace(Model.PaymentReference)
+                        ? "Not Available"
+                        : Model.PaymentReference)
+
+                </strong>
+
+            </div>
+
+            <div class="payment-overview-item">
+
+                <span>Recorded On</span>
+
+                <strong>
+
+                    @Model.PaymentDate.ToString("dd MMM yyyy • hh:mm tt")
+
+                </strong>
+
+            </div>
+
+            <div class="payment-overview-item">
+
+                <span>Expires</span>
+
+                <strong>
+
+                    @Model.ExpiresAt.ToString("dd MMM yyyy • hh:mm tt")
+
+                </strong>
+
+            </div>
+
+            <div class="payment-overview-item">
+
+                <span>Expired</span>
+
+                <strong>
+
+                    @(Model.IsExpired ? "Yes" : "No")
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+     <div class="payment-bottom-actions">
+
+    <a asp-action="Index"
+       class="btn btn-light payment-action-btn">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back to Payments
+
+    </a>
+
+    <button class="btn btn-warning payment-action-btn"
+            onclick="window.print()">
+
+        <i class="bi bi-printer"></i>
+
+        Print Receipt
+
+    </button>
+
+</div>
+
+</div>

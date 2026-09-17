@@ -1,0 +1,208 @@
+﻿@model FoodDeliverySystem.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="admin-profile-page">
+
+    <div class="admin-profile-header">
+
+        <div>
+
+            <span class="admin-page-tag">
+
+                <i class="bi bi-person-circle"></i>
+
+                ADMIN PROFILE
+
+            </span>
+
+            <h1>My Profile</h1>
+
+            <p>
+                View and manage your administrator account.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="admin-profile-grid">
+
+        <!-- LEFT -->
+
+        <div class="admin-profile-card">
+
+            <div class="admin-profile-avatar">
+
+                @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+                {
+                    <img src="@Model.ProfilePicture" alt="Profile" />
+                }
+                else
+                {
+                    <i class="bi bi-person-circle"></i>
+                }
+
+            </div>
+
+            <h3>@Model.FullName</h3>
+
+            <span class="admin-active-badge">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+                Active Account
+
+            </span>
+
+            <div class="admin-profile-actions">
+
+                <a asp-action="ChangePhoto"
+                   asp-controller="Admin"
+                   class="food-btn">
+
+                    <i class="bi bi-camera"></i>
+
+                    Change Photo
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="admin-profile-card">
+
+            <h3>
+
+                <i class="bi bi-person-vcard"></i>
+
+                Personal Information
+
+            </h3>
+
+            <div class="admin-profile-info">
+
+                <label>
+
+                    <i class="bi bi-person"></i>
+
+                    Full Name
+
+                </label>
+
+                <span>@Model.FullName</span>
+
+            </div>
+
+            <div class="admin-profile-info">
+
+                <label>
+
+                    <i class="bi bi-envelope"></i>
+
+                    Email
+
+                </label>
+
+                <span>@Model.Email</span>
+
+            </div>
+
+            <div class="admin-profile-info">
+
+                <label>
+
+                    <i class="bi bi-telephone"></i>
+
+                    Phone Number
+
+                </label>
+
+                <span>@Model.PhoneNumber</span>
+
+            </div>
+
+            <div class="admin-profile-info">
+
+                <label>
+
+                    <i class="bi bi-gender-ambiguous"></i>
+
+                    Gender
+
+                </label>
+
+                <span>
+
+                    @(string.IsNullOrWhiteSpace(Model.Gender) ? "Not provided" : Model.Gender)
+
+                </span>
+
+            </div>
+
+            <div class="admin-profile-info">
+
+                <label>
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    Address
+
+                </label>
+
+                <span>
+
+                    @(string.IsNullOrWhiteSpace(Model.Address)
+                        ? "Not Added"
+                        : Model.Address)
+
+                </span>
+
+            </div>
+
+            <div class="admin-profile-info">
+
+                <label>
+
+                    <i class="bi bi-patch-check"></i>
+
+                    Account Status
+
+                </label>
+
+                <span>Active</span>
+
+            </div>
+
+            <div class="admin-profile-actions">
+
+                <a asp-action="EditProfile"
+                   asp-controller="Admin"
+                   class="food-btn">
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    Edit Profile
+
+                </a>
+
+                <br />
+
+                <a asp-action="ChangePassword"
+                   class="food-btn">
+                    <i class="bi bi-shield-lock"></i>
+                    Change Password
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

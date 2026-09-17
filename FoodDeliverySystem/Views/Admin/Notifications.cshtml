@@ -1,0 +1,166 @@
+﻿@model IEnumerable<FoodDeliverySystem.Models.Notification>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="notification-page">
+
+    <div class="notification-page-header">
+
+        <div>
+
+            <h2>
+
+                Notifications
+
+            </h2>
+
+            <p>
+
+                View and manage all system notifications.
+
+            </p>
+
+        </div>
+
+        <form asp-controller="Admin"
+              asp-action="MarkAllNotificationsRead"
+              method="post"
+              class="d-inline">
+
+            @Html.AntiForgeryToken()
+
+            <button type="submit"
+                    class="fx-btn">
+
+                <i class="bi bi-check2-all"></i>
+
+                Mark All As Read
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="notification-toolbar">
+
+        <div class="notification-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   id="notificationSearch"
+                   class="form-control"
+                   placeholder="Search notifications..." />
+
+        </div>
+
+        <div class="notification-filters">
+
+            <button class="filter-btn active">
+                All
+            </button>
+
+            <button class="filter-btn">
+                Unread
+            </button>
+
+            <button class="filter-btn">
+                Orders
+            </button>
+
+            <button class="filter-btn">
+                Payments
+            </button>
+
+            <button class="filter-btn">
+                Riders
+            </button>
+
+            <button class="filter-btn">
+                Restaurants
+            </button>
+
+            <button class="filter-btn">
+                System
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="notification-list-container">
+
+        @if (Model.Any())
+        {
+            @foreach (var notification in Model)
+            {
+                <a href="@notification.Url"
+                   class="notification-card">
+
+                    <div class="notification-icon">
+
+                        <i class="@notification.Icon"></i>
+
+                    </div>
+
+                    <div class="notification-content">
+
+                        <div class="notification-title-row">
+
+                            <h5>
+
+                                @notification.Title
+
+                            </h5>
+
+                            @if (!notification.IsRead)
+                            {
+                                <span class="notification-dot"></span>
+                            }
+
+                        </div>
+
+                        <p>
+
+                            @notification.Message
+
+                        </p>
+
+                        <small>
+
+                            @notification.CreatedAt.ToString("dd MMM yyyy • hh:mm tt")
+
+                        </small>
+
+                    </div>
+
+                </a>
+            }
+        }
+        else
+        {
+            <div class="notification-empty">
+
+                <i class="bi bi-bell-slash"></i>
+
+                <h4>
+
+                    No Notifications
+
+                </h4>
+
+                <p>
+
+                    You're all caught up.
+
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

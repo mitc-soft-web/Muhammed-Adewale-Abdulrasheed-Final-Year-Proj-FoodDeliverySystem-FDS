@@ -1,0 +1,257 @@
+﻿@{
+    ViewData["Title"] = "Activity Log";
+}
+
+<div class="activity-page">
+
+    <div class="activity-top">
+
+        <div>
+
+            <h2 class="activity-title">
+
+                Activity Log
+
+            </h2>
+
+            <p class="activity-subtitle">
+
+                Complete history of all system activities.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="activity-toolbar">
+
+        <input type="text"
+               id="activitySearch"
+               class="form-control activity-search"
+               placeholder="Search activity..." />
+
+        <select id="activityFilter"
+                class="form-select activity-filter">
+
+            <option>All Activities</option>
+
+            <option>Orders</option>
+
+            <option>Payments</option>
+
+            <option>Restaurants</option>
+
+            <option>Customers</option>
+
+            <option>Riders</option>
+
+        </select>
+
+    </div>
+
+    <div class="activity-card">
+
+        @foreach (var activity in ViewBag.RecentActivities)
+        {
+            <div class="activity-row"
+                 data-title="@activity.Title"
+                 data-description="@activity.Description"
+                 data-type="@activity.Type">
+
+                <div class="activity-icon">
+
+                    <i class="@activity.Icon"></i>
+
+                </div>
+
+                <div class="activity-body">
+
+                    <h5>
+
+                        @activity.Title
+
+                    </h5>
+
+                    <p>
+
+                        @activity.Description
+
+                    </p>
+
+                </div>
+
+                <div class="activity-time"
+                     data-time="@(((DateTime)activity.Time).ToString("o"))">
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4">
+
+            <ul class="pagination justify-content-center">
+
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+
+                        <a class="page-link"
+                           asp-action="ActivityLog"
+                           asp-route-page="@(ViewBag.CurrentPage - 1)">
+
+                            Previous
+
+                        </a>
+
+                    </li>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+
+                        <a class="page-link"
+                           asp-action="ActivityLog"
+                           asp-route-page="@i">
+
+                            @i
+
+                        </a>
+
+                    </li>
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+
+                        <a class="page-link"
+                           asp-action="ActivityLog"
+                           asp-route-page="@(ViewBag.CurrentPage + 1)">
+
+                            Next
+
+                        </a>
+
+                    </li>
+                }
+
+            </ul>
+
+        </nav>
+    }
+
+</div>
+
+@section Scripts{
+
+    <script>
+
+        const search=document.getElementById("activitySearch");
+
+        const filter=document.getElementById("activityFilter");
+
+        const rows=document.querySelectorAll(".activity-row");
+
+             function filterActivities(){
+
+            const keyword = search.value.toLowerCase();
+
+            const selectedType = filter.value;
+
+            rows.forEach(row => {
+
+                const title = row.dataset.title.toLowerCase();
+
+                const description = row.dataset.description.toLowerCase();
+
+                const type = row.dataset.type;
+
+                const matchSearch =
+
+                    title.includes(keyword) ||
+                    description.includes(keyword);
+
+                const matchType =
+
+                    selectedType === "All Activities" ||
+                    type === selectedType;
+
+                row.style.display =
+
+                    (matchSearch && matchType)
+                        ? "flex"
+                        : "none";
+
+            });
+
+        }
+
+        search.addEventListener("keyup",filterActivities);
+
+        filter.addEventListener("change",filterActivities);
+
+
+
+                // =========================
+        // Relative Time
+        // =========================
+
+        function getRelativeTime(date) {
+
+            const now = new Date();
+
+            const seconds = Math.floor((now - date) / 1000);
+
+            if (seconds < 60)
+                return "Just now";
+
+            const minutes = Math.floor(seconds / 60);
+
+            if (minutes < 60)
+                return minutes + " min ago";
+
+            const hours = Math.floor(minutes / 60);
+
+            if (hours < 24)
+                return hours + " hour" + (hours > 1 ? "s" : "") + " ago";
+
+            const days = Math.floor(hours / 24);
+
+            if (days === 1)
+                return "Yesterday";
+
+            if (days < 7)
+                return days + " days ago";
+
+            return date.toLocaleString("en-GB", {
+
+                day: "2-digit",
+
+                month: "short",
+
+                hour: "2-digit",
+
+                minute: "2-digit"
+
+            });
+
+        }
+
+        document.querySelectorAll(".activity-time").forEach(item => {
+
+            const date = new Date(item.dataset.time);
+
+            item.innerText = getRelativeTime(date);
+
+        });
+
+    </script>
+
+}

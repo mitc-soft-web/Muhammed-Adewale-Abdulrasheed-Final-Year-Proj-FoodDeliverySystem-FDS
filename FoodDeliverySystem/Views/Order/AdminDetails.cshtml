@@ -1,0 +1,700 @@
+﻿@model FoodDeliverySystem.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="order-details-page">
+
+    <!-- Header -->
+
+    <div class="admin-order-header">
+
+        <div>
+
+            <div class="admin-order-label">
+                ORDER DETAILS
+            </div>
+
+            <h1 class="admin-order-title">
+                Order #@Model.Id
+            </h1>
+
+            <div class="admin-order-date">
+
+                <span>
+                    @Model.OrderDate.ToString("dd MMM yyyy")
+                </span>
+
+                <span class="dot"></span>
+
+                <span>
+                    @Model.OrderDate.ToString("hh:mm tt")
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="admin-order-actions">
+
+            @{
+                var statusClass = Model.Status switch
+                {
+                    "Pending" => "status-pending",
+                    "Preparing" => "status-preparing",
+                    "Ready for Pickup" => "status-ready",
+                    "Out for Delivery" => "status-delivery",
+                    "Delivered" => "status-delivered",
+                    "Cancelled" => "status-cancelled",
+                    "Payment Failed" => "status-cancelled",
+                    _ => "status-pending"
+                };
+            }
+
+            <span class="admin-order-status-pill @statusClass">
+
+                @Model.Status
+
+            </span>
+
+            <a asp-action="Index"
+               class="btn admin-order-action-btn">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back
+
+            </a>
+
+            <button class="btn admin-order-action-btn"
+                    onclick="window.print()">
+
+                <i class="bi bi-printer"></i>
+
+                Print Invoice
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Information -->
+
+    <div class="admin-order-grid">
+
+        <!-- Customer -->
+
+        <div class="admin-order-card">
+
+            <div class="admin-order-card-title">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>Customer</span>
+
+            </div>
+
+            <h3>
+
+                @Model.Customer.FullName
+
+            </h3>
+
+            <p>
+
+                <i class="bi bi-envelope"></i>
+
+                @Model.Customer.Email
+
+            </p>
+
+            <p>
+
+                <i class="bi bi-telephone"></i>
+
+                @Model.PhoneNumber
+
+            </p>
+
+            <p>
+
+                <i class="bi bi-geo-alt"></i>
+
+                @Model.DeliveryAddress
+
+            </p>
+
+            @if (!string.IsNullOrWhiteSpace(Model.OrderNote))
+            {
+                <div class="admin-order-note-box">
+
+                    <strong>
+
+                        <i class="bi bi-chat-left-text"></i>
+
+                        Order Note
+
+                    </strong>
+
+                    <p class="mb-0 mt-2">
+
+                        @Model.OrderNote
+
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+        <!-- Restaurant -->
+
+        <div class="admin-order-card">
+
+            <div class="admin-order-card-title">
+
+                <i class="bi bi-shop"></i>
+
+                <span>Restaurant</span>
+
+            </div>
+
+            @{
+                var restaurant = Model.OrderItems.FirstOrDefault()?.FoodItem?.Restaurant;
+            }
+
+            @if (restaurant != null)
+            {
+                <h4>@restaurant.Name</h4>
+
+                <p>
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    @restaurant.Address
+
+                </p>
+
+                <p>
+
+                    <i class="bi bi-telephone"></i>
+
+                    @restaurant.PhoneNumber
+
+                </p>
+            }
+            else
+            {
+                <div class="empty-state">
+
+                    <i class="bi bi-shop"></i>
+
+                    <span>Restaurant information unavailable</span>
+
+                </div>
+            }
+
+        </div>
+
+        <!-- Delivery -->
+
+        <div class="admin-order-card">
+
+            <div class="admin-order-card-title">
+
+                <i class="bi bi-bicycle"></i>
+
+                <span>Delivery Rider</span>
+
+            </div>
+
+            @if (Model.DeliveryRider != null)
+            {
+                <h3>@Model.DeliveryRider.User.FullName</h3>
+
+                <p>
+
+                    <i class="bi bi-truck"></i>
+
+                    @Model.DeliveryRider.VehicleType
+
+                </p>
+            }
+            else
+            {
+                <div class="empty-state">
+
+                    <i class="bi bi-person-x"></i>
+
+                    <span>No Rider Assigned</span>
+
+                </div>
+            }
+
+        </div>
+
+        <!-- Payment -->
+
+        <div class="admin-order-card">
+
+            <div class="admin-order-card-title">
+
+                <i class="bi bi-credit-card-2-front"></i>
+
+                <span>Payment</span>
+
+            </div>
+
+            <div class="admin-order-payment-total">
+
+                ₦@Model.TotalAmount.ToString("N0")
+
+            </div>
+
+            <p>
+
+                <i class="bi bi-wallet2"></i>
+
+                @Model.PaymentMethod
+
+            </p>
+
+            <p>
+
+                @if (Model.IsPaid)
+                {
+                    <span class="text-success">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        Paid
+
+                    </span>
+                }
+                else
+                {
+                    <span class="text-danger">
+
+                        <i class="bi bi-x-circle-fill"></i>
+
+                        Pending
+
+                    </span>
+                }
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-order-grid mt-4">
+
+        <!-- Order Summary -->
+
+        <div class="admin-order-card">
+
+            <div class="admin-order-card-title">
+
+                <i class="bi bi-receipt"></i>
+
+                <span>Order Summary</span>
+
+            </div>
+
+            <div class="admin-order-summary-row">
+
+                <span>Order ID</span>
+
+                <strong>#@Model.Id</strong>
+
+            </div>
+
+            <div class="admin-order-summary-row">
+
+                <span>Items</span>
+
+                <strong>@Model.OrderItems.Sum(x => x.Quantity)</strong>
+
+            </div>
+
+            <div class="admin-order-summary-row">
+
+                <span>Subtotal</span>
+
+                <strong>₦@Model.SubTotal.ToString("N0")</strong>
+
+            </div>
+
+            <div class="admin-order-summary-row">
+
+                <span>Delivery Fee</span>
+
+                <strong>₦@Model.DeliveryFee.ToString("N0")</strong>
+
+            </div>
+
+            <hr />
+
+            <div class="admin-order-summary-total">
+
+                <span>Total</span>
+
+                <strong>₦@Model.TotalAmount.ToString("N0")</strong>
+
+            </div>
+
+        </div>
+
+        <!-- Delivery Information -->
+
+        <div class="admin-order-card">
+
+            <div class="admin-order-card-title">
+
+                <i class="bi bi-geo-alt-fill"></i>
+
+                <span>Delivery Information</span>
+
+            </div>
+
+            <div class="admin-order-address-box">
+
+                @Model.DeliveryAddress
+
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.OrderNote))
+            {
+                <div class="admin-order-note-box mt-4">
+
+                    <div class="admin-order-card-title mb-2">
+
+                        <i class="bi bi-chat-left-text"></i>
+
+                        <span>Customer Note</span>
+
+                    </div>
+
+                    <p class="mb-0">
+
+                        @Model.OrderNote
+
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- ORDERED ITEMS -->
+
+    <div class="admin-order-items-section">
+
+        <div class="admin-order-section-title">
+
+            <i class="bi bi-bag-check"></i>
+
+            <span>
+
+                Ordered Items (@Model.OrderItems.Count)
+
+            </span>
+
+        </div>
+
+        @{
+            int index = 0;
+        }
+
+        @foreach (var item in Model.OrderItems)
+        {
+            index++;
+
+            <div class="admin-order-food-card @(index > 3 ? "extra-food d-none" : "")">
+
+                <div class="admin-order-food-left">
+
+                    <img src="@item.FoodItem.ImageUrl"
+                         class="admin-order-food-image"
+                         alt="@item.FoodItem.Name" />
+
+                    <div>
+
+                        <h4 class="admin-order-food-name">
+
+                            @item.FoodItem.Name
+
+                        </h4>
+
+                        <div class="admin-order-food-category">
+
+                            @item.FoodItem.FoodCategory?.Name
+
+                        </div>
+
+                        <div class="admin-order-food-restaurant">
+
+                            <i class="bi bi-shop"></i>
+
+                            @item.FoodItem.Restaurant?.Name
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="admin-order-food-right">
+
+                    <span class="admin-order-availability @(item.FoodItem.IsAvailable ? "admin-order-available" : "admin-order-unavailable")">
+
+                        @(item.FoodItem.IsAvailable ? "Available" : "Unavailable")
+
+                    </span>
+
+                    <div class="admin-order-food-qty">
+
+                        Qty × @item.Quantity
+
+                    </div>
+
+                    <div class="admin-order-food-total">
+
+                        ₦@item.TotalPrice.ToString("N0")
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+        @if (Model.OrderItems.Count > 3)
+        {
+            <div class="text-center mt-4">
+
+                <button type="button"
+                        id="toggleFoodItems"
+                        class="btn btn-outline-warning rounded-pill px-4">
+
+                    View All Items
+
+                </button>
+
+            </div>
+        }
+
+    </div>
+
+    <div class="admin-order-management-card">
+
+        <div class="admin-order-management-header">
+
+            <div>
+
+                <h3>
+
+                    <i class="bi bi-sliders"></i>
+
+                    Order Management
+
+                </h3>
+
+                <p>
+
+                    Update the order status and assign a delivery rider.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        @if (Model.Status != "Delivered"
+        && Model.Status != "Cancelled"
+        && Model.Status != "Payment Failed")
+        {
+
+            <form asp-action="Edit" method="post">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="admin-order-management-grid">
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Order Status
+
+                        </label>
+
+                        <select asp-for="Status"
+                                class="form-select">
+
+                            <option value="Preparing">
+
+                                Preparing
+
+                            </option>
+
+                            <option value="Ready for Pickup">
+
+                                Ready for Pickup
+
+                            </option>
+
+                            <option value="Cancelled">
+
+                                Cancelled
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div>
+
+                        <label class="form-label">
+
+                            Delivery Rider
+
+                        </label>
+
+                        <select name="DeliveryRiderId"
+                                class="form-select">
+
+                            <option value="">
+
+                                Select Rider
+
+                            </option>
+
+                            @foreach (var rider in ViewBag.Riders)
+                            {
+                                <option value="@rider.Id"
+                                        selected="@(Model.DeliveryRiderId==rider.Id?"selected":null)">
+
+                                    @rider.User.FullName
+                                    (@rider.VehicleType)
+
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="admin-order-management-footer">
+
+                    <button class="admin-order-update-btn">
+
+                        <i class="bi bi-check2-circle"></i>
+
+                        Apply Update
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        }
+        else
+        {
+
+            <div class="admin-order-closed-card">
+
+                <div class="admin-order-closed-icon">
+
+                    @if (Model.Status == "Delivered")
+                    {
+                        <i class="bi bi-check-circle-fill"></i>
+                    }
+                    else if (Model.Status == "Cancelled")
+                    {
+                        <i class="bi bi-x-circle-fill"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-credit-card-2-front-fill"></i>
+                    }
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Order Closed
+
+                    </h3>
+
+                    <p>
+
+                        This order has been
+
+                        <strong>
+
+                            @Model.Status
+
+                        </strong>
+
+                        and can no longer be modified.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const button = document.getElementById("toggleFoodItems");
+
+        if (!button) return;
+
+        button.addEventListener("click", function () {
+
+            const hiddenItems = document.querySelectorAll(".extra-food");
+
+            hiddenItems.forEach(item => {
+
+                item.classList.toggle("d-none");
+
+            });
+
+            if (button.innerText === "View All Items") {
+
+                button.innerText = "Show Less";
+
+            }
+            else {
+
+                button.innerText = "View All Items";
+
+            }
+
+        });
+
+    });
+
+</script>

@@ -1,0 +1,227 @@
+﻿@model FoodDeliverySystem.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container login-page">
+
+    <div class="row align-items-center g-2">
+
+        <!-- LEFT SIDE -->
+
+        <div class="col-lg-6 text-center d-flex flex-column justify-content-center">
+
+            <div class="mb-2">
+
+                <img src="~/images/logo-light.png"
+                     alt="Food Xpress"
+                     class="img-fluid login-logo" />
+
+            </div>
+
+            <h3 class="fw-bold login-title">
+                Fast Food. Fresh Taste. Right on Time.
+            </h3>
+
+            <p class="lead text-muted login-subtitle">
+                Discover amazing meals from your favourite restaurants and have them delivered straight to your doorstep.
+            </p>
+
+            <img src="~/images/login-illustration.png"
+                 class="img-fluid login-illustration"
+                 alt="Food Xpress" />
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="col-lg-5 offset-lg-1 d-flex align-items-center">
+
+            <div class="card border-0 shadow-lg rounded-4 w-100">
+
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+
+                        <h2 class="fw-bold">
+
+                            Welcome Back
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            Login to continue enjoying Food Xpress.
+
+                        </p>
+
+                    </div>
+
+                    <form asp-action="Login"
+                          method="post">
+
+                        <div asp-validation-summary="All"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Email"
+                                   class="form-label fw-semibold"></label>
+
+                            <div class="position-relative">
+
+                                <i class="bi bi-envelope input-icon"></i>
+
+                                <input asp-for="Email"
+                                       type="email"
+                                       class="form-control login-input email-validation"
+                                       autocomplete="email"
+                                       placeholder="Enter your email address" />
+
+                            </div>
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger small"></span>
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label asp-for="Password"
+                                   class="form-label fw-semibold"></label>
+
+                            <div class="position-relative">
+
+                                <i class="bi bi-lock input-icon"></i>
+
+                                <input asp-for="Password"
+                                       id="passwordInput"
+                                       class="form-control login-input password-input"
+                                       placeholder="Enter your password"
+                                       autocomplete="current-password" />
+
+                                <i class="bi bi-eye password-toggle"
+                                   id="togglePassword"></i>
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-start mt-3">
+
+                            <div class="form-check">
+                                <input asp-for="RememberMe" class="form-check-input" />
+                                <label asp-for="RememberMe" class="form-check-label"></label>
+                            </div>
+
+                            <div class="text-end">
+
+                                <a asp-action="ForgotPassword"
+                                   class="text-decoration-none fw-semibold auth-link">
+
+                                    Forgot Password?
+
+                                </a>
+
+                                @* <br />
+
+                                <a asp-action="ResendVerification"
+                                   class="text-decoration-none auth-link-small">
+
+                                    Didn't receive verification email?
+
+                                </a> *@
+
+                            </div>
+
+                           
+
+                        </div>
+                        <br/>
+
+                        <button type="submit"
+                                class="btn btn-lg w-100 rounded-3 text-white submit-loading-btn"
+                                style="background:linear-gradient(90deg,#ff6b35,#ff9f1c);
+                                border:none;"
+                                onmouseover="this.style.opacity='0.9'"
+                                onmouseout="this.style.opacity='1'"
+                                data-loading="Signing In...">
+
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                            Login
+
+                        </button>
+
+                    </form>
+
+                    <hr />
+
+                    <div class="text-center">
+
+                        New to Food Xpress?
+
+                        <a asp-controller="Account"
+                           asp-action="Register"
+                           class="fw-bold text-decoration-none"
+                           style="color:#ff6b35;">
+
+                            Create an Account
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/email-validation.js"></script>
+}
+<script>
+
+    const toggle =
+    document.getElementById("togglePassword");
+
+    const password =
+    document.getElementById("passwordInput");
+
+    toggle.addEventListener("click",function(){
+
+        if(password.type==="password"){
+
+            password.type="text";
+
+            toggle.classList.remove("bi-eye");
+
+            toggle.classList.add("bi-eye-slash");
+
+        }
+        else{
+
+            password.type="password";
+
+            toggle.classList.remove("bi-eye-slash");
+
+            toggle.classList.add("bi-eye");
+
+        }
+
+    });
+
+</script>

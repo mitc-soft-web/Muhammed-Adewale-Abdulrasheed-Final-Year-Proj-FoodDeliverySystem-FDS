@@ -1,0 +1,585 @@
+﻿@model IEnumerable<FoodDeliverySystem.Models.DeliveryRider>
+
+@{
+    ViewData["Title"] = "Rider Applications";
+}
+
+<div class="admin-riders-page">
+
+    <!-- HERO -->
+
+    <div class="admin-riders-hero">
+
+        <div>
+
+            <div class="admin-riders-label">
+
+                <i class="bi bi-person-badge"></i>
+
+                RIDER MANAGEMENT
+
+            </div>
+
+            <h1 class="admin-riders-title">
+
+                Rider Applications
+
+            </h1>
+
+            <p class="admin-riders-subtitle">
+
+                Review, approve and manage delivery rider applications.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- STATISTICS -->
+
+    <div class="admin-riders-stats">
+
+        <div class="admin-riders-stat-card">
+
+            <div class="admin-riders-stat-icon pending">
+
+                <i class="bi bi-clock-history"></i>
+
+            </div>
+
+            <div>
+
+                <div class="admin-riders-stat-value">
+
+                    @Model.Count(r => r.Status == "Pending")
+
+                </div>
+
+                <div class="admin-riders-stat-title">
+
+                    Pending Applications
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="admin-riders-stat-card">
+
+            <div class="admin-riders-stat-icon approved">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+            </div>
+
+            <div>
+
+                <div class="admin-riders-stat-value">
+
+                    @Model.Count(r => r.Status == "Approved")
+
+                </div>
+
+                <div class="admin-riders-stat-title">
+
+                    Approved Riders
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="admin-riders-stat-card">
+
+            <div class="admin-riders-stat-icon rejected">
+
+                <i class="bi bi-x-circle-fill"></i>
+
+            </div>
+
+            <div>
+
+                <div class="admin-riders-stat-value">
+
+                    @Model.Count(r => r.Status == "Rejected")
+
+                </div>
+
+                <div class="admin-riders-stat-title">
+
+                    Rejected Riders
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="admin-riders-stat-card">
+
+            <div class="admin-riders-stat-icon total">
+
+                <i class="bi bi-people-fill"></i>
+
+            </div>
+
+            <div>
+
+                <div class="admin-riders-stat-value">
+
+                    @Model.Count()
+
+                </div>
+
+                <div class="admin-riders-stat-title">
+
+                    Total Applications
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SEARCH & FILTER -->
+
+    <form method="get"
+          asp-action="Index"
+          class="admin-riders-toolbar">
+
+        <div class="admin-riders-search">
+
+            <i class="bi bi-search"></i>
+
+            <input type="text"
+                   name="search"
+                   value="@ViewBag.Search"
+                   placeholder="Search rider, email or plate number..." />
+
+        </div>
+
+        <div class="admin-riders-filters">
+
+            <select name="status">
+
+                <option value="">All Status</option>
+
+                <option value="Pending"
+                        selected="@(ViewBag.Status?.ToString() == "Pending")">
+
+                    Pending
+
+                </option>
+
+                <option value="Approved"
+                        selected="@(ViewBag.Status?.ToString() == "Approved")">
+
+                    Approved
+
+                </option>
+
+                <option value="Rejected"
+                        selected="@(ViewBag.Status?.ToString() == "Rejected")">
+
+                    Rejected
+
+                </option>
+
+            </select>
+
+            <select name="vehicle">
+
+                <option value="">All Vehicles</option>
+
+                <option value="Bike"
+                        selected="@(ViewBag.Vehicle?.ToString() == "Bike")">
+
+                    Bike
+
+                </option>
+
+                <option value="Electric Bike"
+                        selected="@(ViewBag.Vehicle?.ToString() == "Electric Bike")">
+
+                    Electric Bike
+
+                </option>
+
+                <option value="Car"
+                        selected="@(ViewBag.Vehicle?.ToString() == "Car")">
+
+                    Car
+
+                </option>
+
+                <option value="Bicycle"
+                        selected="@(ViewBag.Vehicle?.ToString() == "Bicycle")">
+
+                    Bicycle
+
+                </option>
+
+                <option value="Motorcycle"
+                        selected="@(ViewBag.Vehicle?.ToString() == "Motorcycle")">
+
+                    Motorcycle
+
+                </option>
+
+            </select>
+
+            <button type="submit"
+                    class="admin-riders-search-btn">
+
+                <i class="bi bi-search"></i>
+
+                Search
+
+            </button>
+
+            <a asp-action="Index"
+               class="admin-riders-reset-btn">
+
+                <i class="bi bi-arrow-clockwise"></i>
+
+                Reset
+
+            </a>
+
+        </div>
+
+    </form>
+
+
+    <!-- TABLE -->
+
+    <div class="admin-riders-table-card">
+
+        <table class="admin-riders-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        <i class="bi bi-person"></i>
+
+                        Rider
+
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-bicycle"></i>
+
+                        Vehicle
+
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-calendar-event"></i>
+
+                        Applied
+
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-patch-check"></i>
+
+                        Status
+
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-gear"></i>
+
+                        Actions
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var rider in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="admin-rider-name">
+
+                                    <strong>
+
+                                        @rider.User?.FullName
+
+                                    </strong>
+
+                                    <div class="text-muted small">
+
+                                        @rider.User?.Email
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                @rider.VehicleType
+
+                            </td>
+
+                            <td>
+
+                                @rider.CreatedAt.ToString("dd MMM yyyy")
+
+                            </td>
+
+                            <td>
+
+                                @if (rider.Status == "Pending")
+                                {
+                                    <span class="admin-rider-status pending">
+
+                                        <i class="bi bi-clock-history"></i>
+
+                                        Pending
+
+                                    </span>
+                                }
+                                else if (rider.Status == "Approved")
+                                {
+                                    <span class="admin-rider-status approved">
+
+                                        <i class="bi bi-check-circle-fill"></i>
+
+                                        Approved
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="admin-rider-status rejected">
+
+                                        <i class="bi bi-x-circle-fill"></i>
+
+                                        Rejected
+
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Details"
+                                asp-route-id="@rider.Id"
+                                class="admin-rider-view-file">
+
+                                    <i class="bi bi-eye"></i>
+
+                                    View
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">
+
+                            <div class="admin-empty-state">
+
+                                <i class="bi bi-search"></i>
+
+                                <h4>No rider applications found</h4>
+
+                                <p>
+                                    Try changing your search keywords or filters.
+                                </p>
+
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- MOBILE RIDER CARDS -->
+
+    <div class="admin-riders-mobile">
+        @if (Model.Any())
+        {
+            @foreach (var rider in Model)
+            {
+
+                <div class="admin-rider-mobile-card">
+
+                    <div class="admin-rider-mobile-header">
+
+                        <div>
+
+                            <h4>
+
+                                @rider.User?.FullName
+
+                            </h4>
+
+                            <small>
+
+                                @rider.User?.Email
+
+                            </small>
+
+                        </div>
+
+                        @if (rider.Status == "Pending")
+                        {
+                            <span class="admin-rider-status pending">
+
+                                <i class="bi bi-clock-history"></i>
+
+                                Pending
+
+                            </span>
+                        }
+                        else if (rider.Status == "Approved")
+                        {
+                            <span class="admin-rider-status approved">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Approved
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="admin-rider-status rejected">
+
+                                <i class="bi bi-x-circle-fill"></i>
+
+                                Rejected
+
+                            </span>
+                        }
+
+                    </div>
+
+                    <div class="admin-rider-mobile-body">
+
+                        <div class="admin-rider-mobile-row">
+
+                            <span>
+
+                                <i class="bi bi-bicycle"></i>
+
+                                Vehicle
+
+                            </span>
+
+                            <strong>
+
+                                @rider.VehicleType
+
+                            </strong>
+
+                        </div>
+
+                        <div class="admin-rider-mobile-row">
+
+                            <span>
+
+                                <i class="bi bi-calendar-event"></i>
+
+                                Applied
+
+                            </span>
+
+                            <strong>
+
+                                @rider.CreatedAt.ToString("dd MMM yyyy")
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <div class="admin-rider-mobile-footer">
+
+                        <a asp-action="Details"
+                        asp-route-id="@rider.Id"
+                        class="admin-rider-view-file">
+
+                            <i class="bi bi-eye"></i>
+
+                            View Details
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            }
+		}
+		else
+		{
+			<div class="admin-empty-state">
+				<i class="bi bi-search"></i>
+				<h4>No rider applications found</h4>
+				<p>
+					Try changing your search keywords or filters.
+				</p>
+			</div>
+		}
+
+    </div>
+
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                const status = document.querySelector('select[name="status"]');
+                const vehicle = document.querySelector('select[name="vehicle"]');
+
+                if (status) {
+                    status.addEventListener("change", function () {
+                        this.form.submit();
+                    });
+                }
+
+                if (vehicle) {
+                    vehicle.addEventListener("change", function () {
+                        this.form.submit();
+                    });
+                }
+
+            });
+    </script>
+</div>

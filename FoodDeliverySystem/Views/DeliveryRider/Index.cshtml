@@ -1,0 +1,75 @@
+﻿@model IEnumerable<FoodDeliverySystem.Models.DeliveryRider>
+
+@{
+    ViewData["Title"] = "Delivery Riders";
+}
+
+<h2 class="mb-4">Delivery Riders</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        ➕ Add Rider
+    </a>
+</p>
+
+<table class="table table-bordered table-hover">
+
+    <thead class="table-dark">
+        <tr>
+            <th>Rider Name</th>
+            <th>Email</th>
+            <th>Vehicle</th>
+            <th>Status</th>
+            <th width="220">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var rider in Model)
+        {
+            <tr>
+
+                <td>@rider.User?.FullName</td>
+
+                <td>@rider.User?.Email</td>
+
+                <td>@rider.VehicleType</td>
+
+                <td>
+                    @if (rider.IsAvailable)
+                    {
+                        <span class="badge bg-success">
+                            Available
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">
+                            Busy
+                        </span>
+                    }
+                </td>
+
+                <td>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@rider.Id"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@rider.Id"
+                       class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

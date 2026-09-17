@@ -1,0 +1,574 @@
+﻿@model IEnumerable<FoodDeliverySystem.Models.Payment>
+
+@{
+    ViewData["Title"] = "Payments";
+}
+
+<div class="admin-payment-page">
+
+    <div class="admin-payment-header">
+
+        <div>
+
+            <div class="admin-payment-label">
+                <i class="bi bi-credit-card-2-front"></i>
+                PAYMENT MANAGEMENT
+
+            </div>
+
+            <h1 class="admin-payment-title">
+                <i class="bi bi-credit-card-2-front"></i>
+                Payments
+
+            </h1>
+
+            <p class="admin-payment-subtitle">
+
+                <i class="bi bi-graph-up-arrow"></i>
+
+                Monitor transactions, payment methods and revenue across Food Xpress.
+
+            </p>
+
+        </div>
+
+        <div class="dropdown">
+
+            <button class="btn admin-payment-export dropdown-toggle"
+                    data-bs-toggle="dropdown">
+
+                <i class="bi bi-download"></i>
+
+                Export
+
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4">
+
+                <li>
+
+                    <a class="dropdown-item"
+                       href="#"
+                       onclick="window.print()">
+
+                        <i class="bi bi-printer me-2"></i>
+
+                        Print
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="dropdown-item"
+                       asp-action="ExportCsv">
+
+                        <i class="bi bi-filetype-csv me-2"></i>
+
+                        Export CSV
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <div class="admin-payment-stats">
+
+        <div class="admin-payment-stat-card">
+
+            <div class="admin-payment-stat-icon revenue">
+
+                <i class="bi bi-cash-stack"></i>
+
+            </div>
+
+            <div>
+
+                <small>Total Revenue</small>
+
+                <h3>
+
+                    ₦@(((decimal)ViewBag.TotalRevenue).ToString("N0"))
+
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="admin-payment-stat-card">
+
+            <div class="admin-payment-stat-icon paid">
+
+                <i class="bi bi-check-circle"></i>
+
+            </div>
+
+            <div>
+
+                <small>Successful Payments</small>
+
+                <h3>
+
+                    @ViewBag.TotalPaid
+
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="admin-payment-stat-card">
+
+            <div class="admin-payment-stat-icon pending">
+
+                <i class="bi bi-clock-history"></i>
+
+            </div>
+
+            <div>
+
+                <small>Pending Payments</small>
+
+                <h3>
+
+                    @ViewBag.TotalPending
+
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="admin-payment-stat-card">
+
+            <div class="admin-payment-stat-icon failed">
+
+                <i class="bi bi-x-circle"></i>
+
+            </div>
+
+            <div>
+
+                <small>Failed Payments</small>
+
+                <h3>
+
+                    @ViewBag.TotalFailed
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <form asp-action="Index"
+          method="get"
+          class="admin-payment-toolbar">
+
+        <div class="admin-payment-search">
+
+            <i class="bi bi-search admin-payments-search-icon"></i>
+
+            <input type="text"
+                   name="search"
+                   value="@ViewBag.Search"
+                   placeholder="Search payment, order or customer..." />
+
+        </div>
+
+        <div class="admin-payment-filters">
+
+            <i class="bi bi-funnel"></i>
+
+            <select name="status"
+                    class="form-select"
+                    onchange="this.form.submit()">
+
+                <option value="">All Status</option>
+
+                <option value="Pending"
+                        selected="@(ViewBag.Status?.ToString() == "Pending")">
+                    Pending
+                </option>
+
+                <option value="Pending Collection"
+                        selected="@(ViewBag.Status?.ToString() == "Pending Collection")">
+                    Pending Collection
+                </option>
+
+                <option value="Paid"
+                        selected="@(ViewBag.Status?.ToString() == "Paid")">
+                    Paid
+                </option>
+
+                <option value="Payment Failed"
+                        selected="@(ViewBag.Status?.ToString() == "Payment Failed")">
+                    Payment Failed
+                </option>
+
+            </select>
+
+            <select name="method"
+                    class="form-select"
+                    onchange="this.form.submit()">
+
+                <option value="">All Methods</option>
+
+                @if (ViewBag.Method == "Cash on Delivery")
+                {
+                    <option value="Cash on Delivery" selected>
+                        Cash on Delivery
+                    </option>
+                }
+                else
+                {
+                    <option value="Cash on Delivery">
+                        Cash on Delivery
+                    </option>
+                }
+
+                @if (ViewBag.Method == "Pay Online")
+                {
+                    <option value="Pay Online" selected>
+                        Pay Online
+                    </option>
+                }
+                else
+                {
+                    <option value="Pay Online">
+                        Pay Online
+                    </option>
+                }
+
+            </select>
+
+            <button type="submit"
+                    class="btn admin-riders-search-btn">
+
+                <i class="bi bi-search"></i>
+
+                Search
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn admin-riders-reset-btn">
+
+                <i class="bi bi-arrow-clockwise"></i>
+
+                Reset
+
+            </a>
+
+        </div>
+
+    </form>
+
+    <div class="admin-payment-results">
+
+        Showing
+
+        <strong>
+
+            @Model.Count()
+
+        </strong>
+
+        of
+
+        <strong>
+
+            @ViewBag.TotalItems
+
+        </strong>
+
+        payments
+
+    </div>
+
+    <div class="admin-payment-table-wrapper">
+
+        <table class="admin-payment-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        <i class="bi bi-receipt"></i>
+                        Payment
+                    </th>
+
+                    <th>
+                        <i class="bi bi-bag-check"></i>
+                        Order
+                    </th>
+
+                    <th>
+                        <i class="bi bi-person"></i>
+                        Customer
+                    </th>
+
+                    <th>
+                        <i class="bi bi-cash-stack"></i>
+                        Amount
+                    </th>
+
+                    <th>
+                        <i class="bi bi-credit-card-2-front"></i>
+                        Method
+                    </th>
+
+                    <th>
+                        <i class="bi bi-patch-check"></i>
+                        Status
+                    </th>
+
+                    <th>
+                        <i class="bi bi-eye"></i>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="admin-payment-id">
+
+                                    <strong>
+
+                                        #@item.Id
+
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <span class="admin-payment-order">
+
+                                    #@item.OrderId
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <div class="admin-payment-customer">
+
+                                    <strong>
+
+                                        @item.Order?.Customer?.FullName
+
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <div class="admin-payment-amount">
+
+                                    ₦@item.Amount.ToString("N0")
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <span class="admin-payment-method">
+
+                                    @item.PaymentMethod
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                @if (item.PaymentStatus == "Paid")
+                                {
+                                    <span class="admin-payment-status paid">
+
+                                        <i class="bi bi-check-circle-fill"></i>
+
+                                        Paid
+
+                                    </span>
+                                }
+                                else if (item.PaymentStatus == "Pending")
+                                {
+                                    <span class="admin-payment-status pending">
+
+                                        <i class="bi bi-hourglass-split"></i>
+
+                                        Pending
+
+                                    </span>
+                                }
+                                else if (item.PaymentStatus == "Pending Collection")
+                                {
+                                    <span class="admin-payment-status pending">
+
+                                        <i class="bi bi-cash-stack"></i>
+
+                                        Pending Collection
+
+                                    </span>
+                                }
+                                else if (item.PaymentStatus == "Payment Failed")
+                                {
+                                    <span class="admin-payment-status failed">
+
+                                        <i class="bi bi-x-circle-fill"></i>
+
+                                        Payment Failed
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="admin-payment-status">
+
+                                        @item.PaymentStatus
+
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.Id"
+                                   class="admin-payment-view">
+
+                                    <i class="bi bi-eye"></i>
+
+                                    View
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="admin-payment-empty">
+
+                                <i class="bi bi-receipt-cutoff"></i>
+
+                                <h4>
+
+                                    No payments found
+
+                                </h4>
+
+                                <p>
+
+                                    No payment records match your current search or filter.
+
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="admin-payment-pagination">
+
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <a asp-action="Index"
+                   asp-route-page="@(ViewBag.CurrentPage - 1)"
+                   asp-route-search="@ViewBag.Search"
+                   asp-route-status="@ViewBag.Status"
+                   asp-route-method="@ViewBag.Method"
+                   class="admin-payment-page-nav">
+
+                    <i class="bi bi-chevron-left"></i>
+
+                    Previous
+
+                </a>
+            }
+
+            <div class="admin-payment-page-numbers">
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <a asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-search="@ViewBag.Search"
+                       asp-route-status="@ViewBag.Status"
+                       asp-route-method="@ViewBag.Method"
+                       class="@(i == ViewBag.CurrentPage ? "active" : "")">
+
+                        @i
+
+                    </a>
+                }
+
+            </div>
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <a asp-action="Index"
+                   asp-route-page="@(ViewBag.CurrentPage + 1)"
+                   asp-route-search="@ViewBag.Search"
+                   asp-route-status="@ViewBag.Status"
+                   asp-route-method="@ViewBag.Method"
+                   class="admin-payment-page-nav">
+
+                    Next
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+            }
+
+        </nav>
+    }
+
+
+</div>

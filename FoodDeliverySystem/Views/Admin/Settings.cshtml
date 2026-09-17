@@ -1,0 +1,840 @@
+﻿@model FoodDeliverySystem.ViewModels.AdminSettingsViewModel
+
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="admin-settings-page">
+    <!-- PAGE HEADER -->
+    <div class="settings-header">
+        <div>
+            <span class="settings-eyebrow">
+                <i class="bi bi-gear-fill"></i>
+                ADMIN SETTINGS
+            </span>
+
+            <h1>Settings</h1>
+
+            <p>
+                Personalize your Food Xpress administration experience,
+                notifications and dashboard preferences.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- SETTINGS FORM -->
+    <form asp-controller="Admin"
+          asp-action="Settings"
+          method="post"
+          id="settingsForm">
+
+        @Html.AntiForgeryToken()
+
+
+        <!-- ========================= -->
+        <!-- APPEARANCE -->
+        <!-- ========================= -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+                <div class="settings-section-icon">
+                    <i class="bi bi-palette-fill"></i>
+                </div>
+
+                <div>
+                    <h2>Appearance</h2>
+                    <p>Customize how the administration panel looks.</p>
+                </div>
+            </div>
+
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <h3>Theme</h3>
+                        <p>Choose the appearance of your administration panel.</p>
+                    </div>
+
+                    <div class="theme-options">
+
+                        <label class="theme-option">
+                            <input asp-for="Theme"
+                                   type="radio"
+                                   value="Light" />
+
+                            <span>
+                                <i class="bi bi-sun-fill"></i>
+                                Light
+                            </span>
+                        </label>
+
+                        <label class="theme-option">
+                            <input asp-for="Theme"
+                                   type="radio"
+                                   value="Dark" />
+
+                            <span>
+                                <i class="bi bi-moon-fill"></i>
+                                Dark
+                            </span>
+                        </label>
+
+                        <label class="theme-option">
+                            <input asp-for="Theme"
+                                   type="radio"
+                                   value="System" />
+
+                            <span>
+                                <i class="bi bi-display-fill"></i>
+                                System
+                            </span>
+                        </label>
+
+                    </div>
+                </div>
+
+
+                <div class="settings-divider"></div>
+
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+                        <h3>Compact Sidebar</h3>
+                        <p>Use a smaller sidebar to give your workspace more room.</p>
+                    </div>
+
+                    <label class="settings-switch">
+                        <input asp-for="SidebarCollapsed"
+                               type="checkbox" />
+
+                        <span class="switch-slider"></span>
+                    </label>
+
+                </div>
+
+
+                <div class="settings-divider"></div>
+
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+                        <h3>Remember Sidebar State</h3>
+                        <p>Remember whether you expanded or collapsed the sidebar.</p>
+                    </div>
+
+                    <label class="settings-switch">
+                        <input asp-for="RememberSidebarState"
+                               type="checkbox" />
+
+                        <span class="switch-slider"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- NOTIFICATIONS -->
+        <!-- ========================= -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+
+                <div class="settings-section-icon">
+                    <i class="bi bi-bell-fill"></i>
+                </div>
+
+                <div>
+                    <h2>Notifications</h2>
+                    <p>Choose which events should notify you.</p>
+                </div>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+                        <h3>Notifications</h3>
+                        <p>Enable or disable administrator notifications.</p>
+                    </div>
+
+                    <label class="settings-switch">
+                        <input asp-for="NotificationsEnabled"
+                               type="checkbox" />
+
+                        <span class="switch-slider"></span>
+                    </label>
+
+                </div>
+
+
+                <div class="settings-divider"></div>
+
+
+                <div class="notification-grid">
+
+                    <label class="notification-option">
+
+                        <span>
+                            <i class="bi bi-bag-check"></i>
+
+                            <span>
+                                <strong>New Orders</strong>
+                                <small>Receive notifications for new orders.</small>
+                            </span>
+                        </span>
+
+                        <input asp-for="NewOrderNotifications"
+                               type="checkbox" />
+
+                    </label>
+
+
+                    <label class="notification-option">
+
+                        <span>
+                            <i class="bi bi-person-badge"></i>
+
+                            <span>
+                                <strong>Rider Applications</strong>
+                                <small>Know when a rider applies.</small>
+                            </span>
+                        </span>
+
+                        <input asp-for="RiderApplicationNotifications"
+                               type="checkbox" />
+
+                    </label>
+
+
+                    <label class="notification-option">
+
+                        <span>
+                            <i class="bi bi-truck"></i>
+
+                            <span>
+                                <strong>Rider Status</strong>
+                                <small>Receive rider status updates.</small>
+                            </span>
+                        </span>
+
+                        <input asp-for="RiderStatusNotifications"
+                               type="checkbox" />
+
+                    </label>
+
+
+                    <label class="notification-option">
+
+                        <span>
+                            <i class="bi bi-credit-card"></i>
+
+                            <span>
+                                <strong>Payments</strong>
+                                <small>Receive payment notifications.</small>
+                            </span>
+                        </span>
+
+                        <input asp-for="PaymentNotifications"
+                               type="checkbox" />
+
+                    </label>
+
+
+                    <label class="notification-option">
+
+                        <span>
+                            <i class="bi bi-shop"></i>
+
+                            <span>
+                                <strong>Restaurants</strong>
+                                <small>Receive restaurant updates.</small>
+                            </span>
+                        </span>
+
+                        <input asp-for="RestaurantNotifications"
+                               type="checkbox" />
+
+                    </label>
+
+
+                    <label class="notification-option">
+
+                        <span>
+                            <i class="bi bi-shield-check"></i>
+
+                            <span>
+                                <strong>System</strong>
+                                <small>Important system notifications.</small>
+                            </span>
+                        </span>
+
+                        <input asp-for="SystemNotifications"
+                               type="checkbox" />
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- REGIONAL -->
+        <!-- ========================= -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+
+                <div class="settings-section-icon">
+                    <i class="bi bi-globe2"></i>
+                </div>
+
+                <div>
+                    <h2>Regional Preferences</h2>
+                    <p>Control language, currency and date preferences.</p>
+                </div>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <div class="settings-form-grid">
+
+                    <div class="settings-field">
+
+                        <label asp-for="Language">
+                            Language
+                        </label>
+
+                        <select asp-for="Language"
+                                class="settings-select">
+
+                            <option value="English">
+                                English
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="settings-field">
+
+                        <label asp-for="Currency">
+                            Currency
+                        </label>
+
+                        <select asp-for="Currency"
+                                class="settings-select">
+
+                            <option value="NGN">
+                                Nigerian Naira (₦)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="settings-field">
+
+                        <label asp-for="DateFormat">
+                            Date Format
+                        </label>
+
+                        <select asp-for="DateFormat"
+                                class="settings-select">
+
+                            <option value="dd MMM yyyy">
+                                08 Aug 2026
+                            </option>
+
+                            <option value="dd/MM/yyyy">
+                                08/08/2026
+                            </option>
+
+                            <option value="MM/dd/yyyy">
+                                08/08/2026
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="settings-field">
+
+                        <label asp-for="TimeFormat">
+                            Time Format
+                        </label>
+
+                        <select asp-for="TimeFormat"
+                                class="settings-select">
+
+                            <option value="12">
+                                12-hour
+                            </option>
+
+                            <option value="24">
+                                24-hour
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- DASHBOARD -->
+        <!-- ========================= -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+
+                <div class="settings-section-icon">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+
+                <div>
+                    <h2>Dashboard Preferences</h2>
+                    <p>Control what appears on your administrator dashboard.</p>
+                </div>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <div class="settings-field">
+
+                    <label asp-for="DefaultDashboard">
+                        Default Dashboard
+                    </label>
+
+                    <select asp-for="DefaultDashboard"
+                            class="settings-select">
+
+                        <option value="Overview">
+                            Overview
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="settings-divider"></div>
+
+
+                <div class="dashboard-options">
+
+                    <label class="dashboard-option">
+                        <input asp-for="ShowRestaurantCard"
+                               type="checkbox" />
+
+                        <span>
+                            <i class="bi bi-shop"></i>
+                            Restaurants
+                        </span>
+                    </label>
+
+
+                    <label class="dashboard-option">
+                        <input asp-for="ShowCategoryCard"
+                               type="checkbox" />
+
+                        <span>
+                            <i class="bi bi-grid"></i>
+                            Categories
+                        </span>
+                    </label>
+
+
+                    <label class="dashboard-option">
+                        <input asp-for="ShowFoodItemCard"
+                               type="checkbox" />
+
+                        <span>
+                            <i class="bi bi-egg-fried"></i>
+                            Food Items
+                        </span>
+                    </label>
+
+
+                    <label class="dashboard-option">
+                        <input asp-for="ShowOrderCard"
+                               type="checkbox" />
+
+                        <span>
+                            <i class="bi bi-box-seam"></i>
+                            Orders
+                        </span>
+                    </label>
+
+
+                    <label class="dashboard-option">
+                        <input asp-for="ShowRiderCard"
+                               type="checkbox" />
+
+                        <span>
+                            <i class="bi bi-bicycle"></i>
+                            Riders
+                        </span>
+                    </label>
+
+
+                    <label class="dashboard-option">
+                        <input asp-for="ShowRevenueCard"
+                               type="checkbox" />
+
+                        <span>
+                            <i class="bi bi-graph-up-arrow"></i>
+                            Revenue
+                        </span>
+                    </label>
+
+                </div>
+
+
+                <div class="settings-divider"></div>
+
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <h3>Auto Refresh Dashboard</h3>
+
+                        <p>
+                            Automatically refresh dashboard information
+                            when new data becomes available.
+                        </p>
+
+                    </div>
+
+                    <label class="settings-switch">
+
+                        <input asp-for="AutoRefreshDashboard"
+                               type="checkbox" />
+
+                        <span class="switch-slider"></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- PRIVACY & SECURITY -->
+        <!-- ========================= -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+
+                <div class="settings-section-icon">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+
+                <div>
+                    <h2>Privacy & Security</h2>
+                    <p>Manage your account security and privacy preferences.</p>
+                </div>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <h3>Activity Tracking</h3>
+
+                        <p>
+                            Keep track of important administrator actions
+                            in the Activity Log.
+                        </p>
+
+                    </div>
+
+                    <label class="settings-switch">
+
+                        <input asp-for="ActivityTrackingEnabled"
+                               type="checkbox" />
+
+                        <span class="switch-slider"></span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="settings-divider"></div>
+
+
+                <div class="security-action">
+
+                    <div class="security-action-icon">
+                        <i class="bi bi-key-fill"></i>
+                    </div>
+
+                    <div>
+                        <h3>Password</h3>
+
+                        <p>
+                            Change your administrator password from your
+                            account security options.
+                        </p>
+                    </div>
+
+                    <a asp-controller="Admin"
+                       asp-action="Profile"
+                       class="settings-outline-button">
+
+                        Manage Account
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- ACCOUNT -->
+        <!-- ========================= -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+
+                <div class="settings-section-icon">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+
+                <div>
+                    <h2>Account</h2>
+                    <p>Information about your administrator account.</p>
+                </div>
+
+            </div>
+
+
+            <div class="settings-card account-settings-card">
+
+                <div class="account-setting">
+
+                    <span>
+                        <i class="bi bi-person"></i>
+                        Full Name
+                    </span>
+
+                    <strong>
+                        @Model.FullName
+                    </strong>
+
+                </div>
+
+
+                <div class="settings-divider"></div>
+
+
+                <div class="account-setting">
+
+                    <span>
+                        <i class="bi bi-envelope"></i>
+                        Email
+                    </span>
+
+                    <strong>
+                        @Model.Email
+                    </strong>
+
+                </div>
+
+
+                <div class="settings-divider"></div>
+
+
+                <div class="account-setting">
+
+                    <span>
+                        <i class="bi bi-patch-check-fill"></i>
+                        Email Status
+                    </span>
+
+                    @if (Model.EmailConfirmed)
+                    {
+                        <span class="verified-badge">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Verified
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="unverified-badge">
+                            Not Verified
+                        </span>
+                    }
+
+                </div>
+
+
+                <div class="account-actions">
+
+                    <a asp-controller="Admin"
+                       asp-action="Profile"
+                       class="settings-outline-button">
+
+                        <i class="bi bi-person"></i>
+
+                        View Profile
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- SAVE BAR -->
+        <!-- ========================= -->
+
+        <div class="settings-save-bar">
+
+            <div>
+
+                <strong>
+                    <i class="bi bi-check-circle-fill"></i>
+                    Settings
+                </strong>
+
+                <span>
+                    Changes will be saved to your administrator account.
+                </span>
+
+            </div>
+
+
+            <div class="settings-save-actions">
+
+                <button type="button"
+                        class="settings-reset-button"
+                        id="resetSettingsButton">
+                    Reset
+                </button>
+
+                <button type="submit"
+                        class="settings-save-button"
+                        id="saveSettingsButton">
+
+                    <span class="save-spinner"></span>
+
+                    <i class="bi bi-check-lg save-icon"></i>
+
+                    <span class="save-text">
+                        Save Changes
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const form = document.getElementById("settingsForm");
+            const saveButton = document.getElementById("saveSettingsButton");
+            const resetButton = document.getElementById("resetSettingsButton");
+
+
+            // ==============================
+            // SAVE BUTTON
+            // ==============================
+
+            if (form && saveButton) {
+
+                form.addEventListener("submit", function () {
+
+                    saveButton.disabled = true;
+                    saveButton.classList.add("is-loading");
+
+                    const text = saveButton.querySelector(".save-text");
+
+                    if (text) {
+                        text.textContent = "Saving...";
+                    }
+
+                });
+
+            }
+
+
+            // ==============================
+            // RESET BUTTON
+            // ==============================
+
+            if (resetButton) {
+
+                resetButton.addEventListener("click", function () {
+
+                    window.location.reload();
+
+                });
+
+            }
+
+        });
+    </script>
+}

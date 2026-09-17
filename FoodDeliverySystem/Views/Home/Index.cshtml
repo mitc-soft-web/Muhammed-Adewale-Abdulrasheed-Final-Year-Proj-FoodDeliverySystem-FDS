@@ -1,0 +1,583 @@
+﻿@model FoodDeliverySystem.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- ================= HERO SECTION ================= -->
+
+<section class="hero-section mb-5">
+
+    <div id="heroCarousel"
+         class="carousel slide carousel-fade"
+         data-bs-ride="carousel">
+
+        <div class="carousel-indicators">
+
+            <button type="button"
+                    data-bs-target="#heroCarousel"
+                    data-bs-slide-to="0"
+                    class="active"></button>
+
+            <button type="button"
+                    data-bs-target="#heroCarousel"
+                    data-bs-slide-to="1"></button>
+
+            <button type="button"
+                    data-bs-target="#heroCarousel"
+                    data-bs-slide-to="2"></button>
+
+        </div>
+
+        <div class="carousel-inner rounded-4 shadow-lg">
+
+            <!-- Slide 1 -->
+
+            <div class="carousel-item active">
+
+                <img src="/images/slides/slide1.jpg"
+                     class="hero-image d-block w-100">
+
+                <div class="hero-dark-overlay"></div>
+
+                <div class="hero-content">
+
+                    <h1>
+
+                        Fresh Meals.<br />
+
+                        Delivered Fast.
+
+                    </h1>
+
+                    <p>
+
+                        Order delicious meals from your favourite restaurants
+
+                        and enjoy fast delivery to your doorstep.
+
+                    </p>
+
+                    <a href="#foods"
+                       class="btn hero-btn">
+
+                        Order Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- Slide 2 -->
+
+            <div class="carousel-item">
+
+                <img src="/images/slides/slide2.jpg"
+                     class="hero-image d-block w-100">
+
+                <div class="hero-dark-overlay"></div>
+
+                <div class="hero-content">
+
+                    <h1>
+
+                        Discover Amazing Restaurants
+
+                    </h1>
+
+                    <p>
+
+                        Browse hundreds of delicious meals
+
+                        prepared by trusted restaurants.
+
+                    </p>
+
+                    <a href="#foods"
+                       class="btn hero-btn">
+
+                        Browse Menu
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- Slide 3 -->
+
+            <div class="carousel-item">
+
+                <img src="/images/slides/slide3.jpg"
+                     class="hero-image d-block w-100">
+
+                <div class="hero-dark-overlay"></div>
+
+              <div class="hero-content">
+
+                    <h1>
+
+                        Fast Delivery.
+
+                        Every Time.
+
+                    </h1>
+
+                    <p>
+
+                        Our professional riders make sure
+
+                        every meal arrives hot and fresh.
+
+                    </p>
+
+                    <a href="#foods"
+                       class="btn hero-btn">
+
+                        Start Ordering
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button class="carousel-control-prev"
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide="prev">
+
+            <span class="carousel-control-prev-icon"></span>
+
+        </button>
+
+        <button class="carousel-control-next"
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide="next">
+
+            <span class="carousel-control-next-icon"></span>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="restaurant-section">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2 class="section-title">
+
+                <i class="bi bi-shop"></i>
+
+                Featured Restaurants
+
+            </h2>
+
+            <p class="section-subtitle">
+
+                Discover top-rated restaurants serving fresh meals across your city.
+
+            </p>
+
+        </div>
+
+        <a asp-controller="Restaurant"
+           asp-action="Index"
+           class="section-link">
+
+            View All Restaurants
+
+            <i class="bi bi-arrow-right-short"></i>
+
+        </a>
+
+    </div>
+
+    <div class="row g-4">
+
+        @foreach (var restaurant in Model.Restaurants)
+        {
+            <div class="col-xl-4 col-lg-6">
+
+                <div class="restaurant-card">
+
+                    <div class="restaurant-image">
+
+                        @if (!string.IsNullOrEmpty(restaurant.CoverImage))
+                        {
+                            <img src="@restaurant.CoverImage" alt="@restaurant.Name" />
+                        }
+                        else if (!string.IsNullOrEmpty(restaurant.Logo))
+                        {
+                            <img src="@restaurant.Logo" alt="@restaurant.Name" />
+                        }
+                        else
+                        {
+                            <img src="/images/hero.jpg" alt="@restaurant.Name" />
+                        }
+
+                        <div class="restaurant-logo">
+
+                            @if (!string.IsNullOrEmpty(restaurant.Logo))
+                            {
+                                <img src="@restaurant.Logo" alt="@restaurant.Name" />
+                            }
+                            else
+                            {
+                                <img src="/images/logo-placeholder.png" alt="@restaurant.Name" />
+                            }
+
+                        </div>
+
+                        @if (restaurant.IsOpen)
+                        {
+                            <span class="restaurant-status available">
+                                <i class="bi bi-check-circle-fill"></i>
+                                Open
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="restaurant-status unavailable">
+                                <i class="bi bi-x-circle-fill"></i>
+                                Closed
+                            </span>
+                        }
+
+                    </div>
+
+                    <div class="restaurant-content">
+
+                        <div class="restaurant-top">
+
+                            <h3>
+
+                                @restaurant.Name
+
+                            </h3>
+
+                            <span class="restaurant-rating">
+
+                                <i class="bi bi-star-fill"></i>
+
+                                4.8
+
+                            </span>
+
+                        </div>
+
+                        <div class="restaurant-tags">
+
+                            <span>Local Cuisine</span>
+
+                            <span>Fast Delivery</span>
+
+                            <span>Top Rated</span>
+
+                        </div>
+
+                        <p class="restaurant-address">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            @restaurant.Address
+
+                        </p>
+
+                        <p class="restaurant-description">
+
+                            @(restaurant.Description ?? "Delicious meals prepared with quality ingredients and delivered fresh.")
+
+                        </p>
+
+                        <div class="restaurant-footer">
+
+                            <span class="delivery-time">
+
+                                <i class="bi bi-clock"></i>
+
+                                Estimated Delivery
+
+                                <strong>25–35 mins</strong>
+
+                            </span>
+
+                            <a asp-controller="Restaurant"
+                               asp-action="Details"
+                               asp-route-id="@restaurant.Id"
+                               class="restaurant-btn">
+
+                                View Restaurant
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</section>
+
+<!--=====================================
+SEARCH
+======================================-->
+
+<section class="food-search-section">
+
+    <div class="food-search-box">
+
+        <i class="bi bi-search"></i>
+
+        <input type="text"
+               id="searchInput"
+               autocomplete="off"
+               placeholder="Search on Food Xpress..." />
+
+        <div id="searchSuggestions"
+             class="search-suggestions">
+        </div>
+
+    </div>
+
+</section>
+
+<!--=====================================
+  Featured Meals
+======================================-->
+
+<section class="food-section" id="foods">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2 class="section-title">
+
+                <i class="bi bi-grid"></i>
+
+                Featured Meals
+
+            </h2>
+
+            <p class="section-subtitle">
+
+                Freshly prepared meals from our most trusted restaurants.
+
+            </p>
+
+            <p id="searchCount"
+               class="search-count">
+
+                Showing all meals
+
+            </p>
+
+        </div>
+
+        <a asp-controller="FoodItem"
+           asp-action="Index"
+           class="section-link">
+
+            Browse Full Menu
+
+            <i class="bi bi-arrow-right-short"></i>
+
+        </a>
+
+    </div>
+
+    <div class="row g-4" id="foodContainer">
+
+        @foreach (var item in Model.FoodItems)
+        {
+
+            <div class="col-xl-4 col-lg-6"
+                 data-food="@item.Name"
+                 data-category="@item.FoodCategory?.Name"
+                 data-restaurant="@item.Restaurant?.Name"
+                 data-description="@item.Description"
+                 data-price="@item.Price"
+                 data-status="@(item.IsAvailable ? "Available" : "Unavailable")">
+
+                <div class="food-modern-card">
+
+                    <div class="food-image">
+
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" alt="@item.Name" />
+                        }
+                        else
+                        {
+                            <img src="/images/hero.jpg" alt="@item.Name" />
+                        }
+
+                        @if (!item.Restaurant!.IsOpen)
+                        {
+                            <span class="food-status closed">
+
+                                Restaurant Closed
+
+                            </span>
+                        }
+                        else if (!item.IsAvailable)
+                        {
+                            <span class="restaurant-status unavailable">
+                                <i class="bi bi-x-circle-fill"></i>
+                                Unavailable
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="restaurant-status available">
+                                <i class="bi bi-check-circle-fill"></i>
+                                Available
+                            </span>
+                        }
+
+                    </div>
+
+                    <div class="food-body">
+
+                        <div class="food-header">
+
+                            <h3>
+
+                                @item.Name
+
+                            </h3>
+
+                            <div class="food-price">
+
+                                ₦@item.Price.ToString("N0")
+
+                            </div>
+
+                        </div>
+
+                        <span class="food-category">
+
+                            @item.FoodCategory?.Name
+
+                        </span>
+
+                        <div class="food-restaurant">
+
+                            <i class="bi bi-shop"></i>
+
+                            @item.Restaurant?.Name
+
+                        </div>
+
+                        <p class="food-description">
+
+                            @item.Description
+
+                        </p>
+
+                        <div class="food-footer">
+
+                            <div class="delivery-info">
+
+                                <i class="bi bi-clock"></i>
+
+                                25–35 mins
+
+                            </div>
+
+                            @if (!item.Restaurant!.IsOpen)
+                            {
+                                <button class="food-button disabled" disabled>
+
+                                    <i class="bi bi-lock-fill"></i>
+
+                                    Restaurant Closed
+
+                                </button>
+                            }
+                            else if (!item.IsAvailable)
+                            {
+                                <button class="food-button disabled" disabled>
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                    Food Unavailable
+
+                                </button>
+                            }
+                            else if (User.IsInRole("Customer"))
+                            {
+                                <a asp-controller="Cart"
+                                   asp-action="AddToCart"
+                                   asp-route-foodId="@item.Id"
+                                   class="food-button">
+
+                                    <i class="bi bi-cart-plus"></i>
+
+                                    Add to Cart
+
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Account"
+                                   asp-action="Login"
+                                   class="food-button">
+
+                                    <i class="bi bi-box-arrow-in-right"></i>
+
+                                    Login to Order
+
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+
+    <div id="noResults" class="search-empty-state" style="display:none;">
+
+        <i class="bi bi-search"></i>
+
+        <h3>No matching food found</h3>
+
+        <p>
+
+            Try searching by food name, restaurant, category or description.
+
+        </p>
+
+    </div>
+
+</section>
+
+@section Scripts{
+
+    <script src="~/js/home-search.js" asp-append-version="true"></script>
+
+}

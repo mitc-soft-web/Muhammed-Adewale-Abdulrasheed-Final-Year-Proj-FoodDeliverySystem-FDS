@@ -1,0 +1,147 @@
+﻿@model FoodDeliverySystem.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container">
+
+    <h2 class="fw-bold mb-4">
+        📦 Order Details
+    </h2>
+
+    <div class="card shadow border-0 mb-4">
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <h5>Order Information</h5>
+
+                    <p>
+                        <strong>Date:</strong>
+                        @Model.OrderDate.ToString("dd MMM yyyy hh:mm tt")
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge bg-warning text-dark">
+                            @Model.Status
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Total:</strong>
+                        ₦@Model.TotalAmount.ToString("N0")
+                    </p>
+
+                    <p>
+                        <strong>Payment:</strong>
+                        @Model.PaymentMethod
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <h5>Delivery Rider</h5>
+
+                    @if (Model.DeliveryRider != null)
+                    {
+                        <p>
+                            <strong>Rider:</strong>
+                            @Model.DeliveryRider.User.FullName
+                        </p>
+
+                        <p>
+                            <strong>Email:</strong>
+                            @Model.DeliveryRider.User.Email
+                        </p>
+
+                        <p>
+                            <strong>Vehicle:</strong>
+                            @Model.DeliveryRider.VehicleType
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">
+                            Rider has not been assigned yet.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-dark text-white">
+
+            <h4 class="mb-0">
+                🍔 Ordered Items
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Food</th>
+
+                        <th>Price</th>
+
+                        <th>Quantity</th>
+
+                        <th>Total</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+
+                            <td>@item.FoodItem.Name</td>
+
+                            <td>₦@item.Price.ToString("N0")</td>
+
+                            <td>@item.Quantity</td>
+
+                            <td>
+                                ₦@((item.Price * item.Quantity).ToString("N0"))
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <a asp-action="MyOrders"
+       class="btn btn-secondary mt-4">
+
+        ← Back to My Orders
+
+    </a>
+
+</div>

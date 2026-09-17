@@ -1,0 +1,188 @@
+﻿@model FoodDeliverySystem.Models.Order
+
+@{
+    ViewData["Title"] = "Track Delivery";
+}
+
+
+<div class="container mt-4">
+
+    <h2 class="fw-bold mb-4">
+        🛵 Track Your Delivery
+    </h2>
+
+
+    <div class="card shadow border-0 mb-4">
+
+        <div class="card-body">
+
+
+            <h5>
+                📦 Delivery Tracking
+            </h5>
+
+
+            <p>
+                Rider:
+
+                <strong>
+                    @Model.DeliveryRider?.User?.FullName
+                </strong>
+
+            </p>
+
+
+            <p>
+                Status:
+
+                <span class="badge bg-primary">
+
+                    @Model.Status
+
+                </span>
+
+            </p>
+
+
+        </div>
+
+    </div>
+
+
+
+    <div id="riderMap" style="height:500px; width:100%;"></div>
+    <div id="trackingStatus"
+         class="alert alert-secondary mt-3">
+
+        Waiting for rider location...
+
+    </div>
+
+</div>
+
+
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+
+
+<script>
+
+    let map;
+    let riderMarker;
+    let riderOnline = false;
+
+    // Create map
+
+    map = L.map('riderMap').setView(
+    [6.4474, 3.3903],
+    15
+    );
+
+
+    // Load map tiles
+
+    L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+    attribution: '&copy; OpenStreetMap contributors'
+    }
+    ).addTo(map);
+
+
+    // Create rider marker
+
+    riderMarker = L.marker(
+    [6.4474, 3.3903]
+    )
+    .addTo(map)
+    .bindPopup("🛵 Rider Location");
+
+
+
+    // SignalR connection
+
+    const connection =
+    new signalR.HubConnectionBuilder()
+    .withUrl("/trackingHub")
+    .withAutomaticReconnect()
+    .build();
+
+
+
+    // Start connection
+
+    connection.start()
+    .then(function(){
+
+    console.log("✅ Customer connected to SignalR");
+
+
+    connection.invoke(
+    "JoinOrderGroup",
+    @Model.Id
+    )
+    .then(function(){
+
+    console.log(
+    "Joined Order Group: @Model.Id"
+    );
+
+    })
+    .catch(function(err){
+
+    console.error(
+    "Failed joining order group:",
+    err
+    );
+
+    });
+
+
+    })
+    .catch(function(err){
+
+    console.error(
+    "SignalR connection failed:",
+    err
+    );
+
+    });
+
+
+    // Receive rider location
+
+    connection.on(
+    "ReceiveLocation",
+    function(riderId, latitude, longitude){
+    riderOnline = true;
+    console.log("=================");
+    console.log("📍 LOCATION RECEIVED");
+    console.log("RIDER:", riderId);
+    console.log("LAT:", latitude);
+    console.log("LONG:", longitude);
+
+
+    document.getElementById("trackingStatus").innerHTML =
+    "🟢 Rider location updated";
+
+    riderMarker.setLatLng(
+    [
+    latitude,
+    longitude
+    ]);
+
+    map.setView(
+    [
+    latitude,
+    longitude
+    ],
+    16);
+
+    });
+
+</script>

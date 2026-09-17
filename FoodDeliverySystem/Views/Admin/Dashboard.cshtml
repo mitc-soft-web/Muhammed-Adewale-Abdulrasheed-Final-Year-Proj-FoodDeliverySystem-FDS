@@ -1,0 +1,900 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="admin-dashboard">
+
+    <!-- ==========================
+       HERO
+    =========================== -->
+
+    <div class="dashboard-hero">
+
+        <div>
+
+            <span class="dashboard-label">
+
+                Dashboard
+
+            </span>
+
+            <h1>
+
+                Welcome back, Administrator
+
+            </h1>
+
+            <p>
+
+                Monitor restaurants, orders, customers and business performance
+                across Food Xpress.
+
+            </p>
+
+        </div>
+
+        <div class="dashboard-date">
+
+            <span>
+
+                @DateTime.Now.ToString("dddd")
+
+            </span>
+
+            <strong>
+
+                @DateTime.Now.ToString("dd MMMM yyyy")
+
+            </strong>
+
+        </div>
+
+    </div>
+
+    <!-- ==========================
+       KPI
+    =========================== -->
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+
+                <i class="bi bi-shop"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.Restaurants</h2>
+
+                <span>Restaurants</span>
+
+            </div>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+
+                <i class="bi bi-grid"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.Categories</h2>
+
+                <span>Categories</span>
+
+            </div>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+
+                <i class="bi bi-basket"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.FoodItems</h2>
+
+                <span>Food Items</span>
+
+            </div>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+
+                <i class="bi bi-box-seam"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.Orders</h2>
+
+                <span>Orders</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==========================
+       BUSINESS OVERVIEW
+    =========================== -->
+
+    <div class="dashboard-overview">
+
+        <div class="overview-card">
+
+            <h3>
+
+                <i class="bi bi-graph-up-arrow"></i>
+
+                Business Overview
+
+            </h3>
+
+            <div class="overview-item">
+
+                <span>
+
+                    <i class="bi bi-hourglass-split"></i>
+
+                    Pending Orders
+
+                </span>
+
+                <strong>@ViewBag.NewOrders</strong>
+
+            </div>
+
+            <div class="overview-item">
+
+                <span>
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Successful Payments
+
+                </span>
+
+                <strong>@ViewBag.SuccessfulPayments</strong>
+
+            </div>
+
+            <div class="overview-item">
+
+                <span>
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Failed Payments
+
+                </span>
+
+                <strong>@ViewBag.FailedPayments</strong>
+
+            </div>
+
+            <div class="overview-item">
+
+                <span>
+
+                    <i class="bi bi-bicycle"></i>
+
+                    Available Riders
+
+                </span>
+
+                <strong>@ViewBag.AvailableRiders</strong>
+
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>
+
+                <i class="bi bi-lightning-charge"></i>
+
+                Quick Management
+
+            </h3>
+
+            <div class="quick-grid">
+
+                <a asp-controller="Restaurant"
+                   asp-action="Index">
+
+                    <i class="bi bi-shop"></i>
+
+                    <span>Restaurants</span>
+
+                </a>
+
+                <a asp-controller="FoodCategory"
+                   asp-action="Index">
+
+                    <i class="bi bi-grid"></i>
+
+                    <span>Categories</span>
+
+                </a>
+
+                <a asp-controller="FoodItem"
+                   asp-action="Index">
+
+                    <i class="bi bi-basket"></i>
+
+                    <span>Food Menu</span>
+
+                </a>
+
+                <a asp-controller="Order"
+                   asp-action="Index">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    <span>Orders</span>
+
+                </a>
+
+                <a asp-controller="Rider"
+                   asp-action="Index">
+
+                    <i class="bi bi-bicycle"></i>
+
+                    <span>Riders</span>
+
+                </a>
+
+                <a asp-controller="Payment"
+                   asp-action="Index">
+
+                    <i class="bi bi-credit-card"></i>
+
+                    <span>Payments</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================
+     ADMIN ANALYTICS
+========================== -->
+
+    <div class="dashboard-analytics">
+
+        <div class="analytics-card">
+
+            <div class="analytics-header">
+
+                <h3>
+
+                    Recent Orders
+
+                </h3>
+
+                <a asp-controller="Order"
+                   asp-action="Index">
+
+                    View All
+
+                    <i class="bi bi-arrow-right-short"></i>
+
+                </a>
+
+            </div>
+
+            <table class="table analytics-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Order</th>
+
+                        <th>Status</th>
+
+                        <th>Total</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var order in ViewBag.RecentOrders)
+                    {
+                        <tr>
+
+                            <td>
+
+                                #@order.Id
+
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+
+                                    @order.Status
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                ₦@order.TotalAmount.ToString("N0")
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="analytics-card">
+
+            <h3>
+
+                Today's Summary
+
+            </h3>
+
+            <div class="summary-item">
+
+                <span>Total Revenue</span>
+
+                <strong>
+
+                    ₦@ViewBag.TodayRevenue.ToString("N0")
+
+                </strong>
+
+            </div>
+
+            <div class="summary-item">
+
+                <span>Today's Orders</span>
+
+                <strong>
+
+                    @ViewBag.TodayOrders
+
+                </strong>
+
+            </div>
+
+            <div class="summary-item">
+
+                <span>Open Restaurants</span>
+
+                <strong>
+
+                    @ViewBag.OpenRestaurants
+
+                </strong>
+
+            </div>
+
+            <div class="summary-item">
+
+                <span>Available Riders</span>
+
+                <strong>
+
+                    @ViewBag.AvailableRiders
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="activity-card mt-4">
+
+        <div class="activity-header">
+
+            <div class="analytics-header">
+
+                <h3 class="analytics-title">
+
+                    Recent Activity
+
+                </h3>
+
+                <a asp-controller="Admin"
+                   asp-action="ActivityLog"
+                   class="view-all-link">
+
+                    View All
+
+                    <i class="bi bi-arrow-right-short"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="activity-list">
+
+            @foreach (var activity in ViewBag.RecentActivities)
+            {
+                <div class="activity-item">
+
+                    <div class="activity-icon">
+
+                        <i class="@activity.Icon"></i>
+
+                    </div>
+
+                    <div class="activity-content">
+
+                        <strong>@activity.Title</strong>
+
+                        <p>@activity.Description</p>
+
+                    </div>
+
+                    <span class="activity-time"
+                          data-time="@(((DateTime)activity.Time).ToString("o"))">
+
+                    </span>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+
+    <div class="insights-section mt-4">
+
+        <div class="activity-header">
+
+            <h3>
+
+                Business Insights
+
+            </h3>
+
+        </div>
+
+        <div class="insight-grid">
+
+            <div class="insight-box">
+
+                <i class="bi bi-graph-up-arrow"></i>
+
+                <h4>@ViewBag.TodayOrders</h4>
+
+                <p>Orders received today</p>
+
+            </div>
+
+            <div class="insight-box">
+
+                <i class="bi bi-cash-stack"></i>
+
+                <h4>₦@ViewBag.TodayRevenue.ToString("N0")</h4>
+
+                <p>Revenue generated today</p>
+
+            </div>
+
+            <div class="insight-box">
+
+                <i class="bi bi-shop-window"></i>
+
+                <h4>@ViewBag.OpenRestaurants</h4>
+
+                <p>Restaurants currently open</p>
+
+            </div>
+
+            <div class="insight-box">
+
+                <i class="bi bi-truck"></i>
+
+                <h4>@ViewBag.AvailableRiders</h4>
+
+                <p>Riders available now</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="analytics-card mt-4">
+
+        <div class="analytics-header">
+
+            <h3>
+
+                Top Selling Foods
+
+            </h3>
+
+            <a asp-controller="FoodItem"
+               asp-action="Index">
+
+                View Menu
+
+            </a>
+
+        </div>
+
+        <table class="table analytics-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Food Item</th>
+
+                    <th>Units Sold</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var food in ViewBag.TopFoods)
+                {
+                    <tr>
+
+                        <td>
+
+                            @food.Food
+
+                        </td>
+
+                        <td>
+
+                            <strong>
+
+                                @food.Quantity
+
+                            </strong>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <hr class="my-5" />
+
+    <div class="dashboard-charts">
+
+        <div class="chart-card">
+
+            <div class="chart-header">
+
+                <h3>
+
+                    Business Analytics
+
+                </h3>
+
+                <div class="chart-switch">
+
+                    <button class="chart-btn active"
+                            data-chart="revenue">
+
+                        Revenue
+
+                    </button>
+
+                    <button class="chart-btn"
+                            data-chart="orders">
+
+                        Orders
+
+                    </button>
+
+                    <button class="chart-btn"
+                            data-chart="payments">
+
+                        Payments
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <canvas id="salesChart"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <div class="chart-header">
+
+                <h3>
+
+                    Order Status
+
+                </h3>
+
+            </div>
+
+            <canvas id="statusChart"></canvas>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        const salesCtx = document.getElementById("salesChart");
+
+        if (salesCtx) {
+
+        const labels =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.SalesLabels));
+
+        const revenue =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.SalesRevenue));
+
+        const orders =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.OrderChart));
+
+        const payments =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.PaymentChart));
+
+        const chart = new Chart(salesCtx, {
+
+        type: "line",
+
+        data: {
+
+        labels: labels,
+
+        datasets: [{
+
+        label: "Revenue",
+
+        data: revenue,
+
+        borderColor: "#ff6b00",
+
+        backgroundColor: "rgba(255,107,0,.15)",
+
+        fill: true,
+
+        tension: .4
+
+        }]
+
+        },
+
+        options: {
+
+        responsive: true,
+
+        plugins: {
+
+        legend: {
+
+        display: false
+
+        }
+
+        }
+
+        }
+
+        });
+
+        document.querySelectorAll(".chart-btn").forEach(button => {
+
+        button.addEventListener("click", function () {
+
+        document.querySelectorAll(".chart-btn")
+        .forEach(b => b.classList.remove("active"));
+
+        this.classList.add("active");
+
+        const type = this.dataset.chart;
+
+        if (type === "revenue") {
+
+        chart.data.datasets[0].label = "Revenue";
+
+        chart.data.datasets[0].data = revenue;
+
+        chart.data.datasets[0].borderColor = "#ff6b00";
+
+        chart.data.datasets[0].backgroundColor = "rgba(255,107,0,.15)";
+
+        }
+
+        else if (type === "orders") {
+
+        chart.data.datasets[0].label = "Orders";
+
+        chart.data.datasets[0].data = orders;
+
+        chart.data.datasets[0].borderColor = "#2563eb";
+
+        chart.data.datasets[0].backgroundColor = "rgba(37,99,235,.15)";
+
+        }
+
+        else {
+
+        chart.data.datasets[0].label = "Payments";
+
+        chart.data.datasets[0].data = payments;
+
+        chart.data.datasets[0].borderColor = "#10b981";
+
+        chart.data.datasets[0].backgroundColor = "rgba(16,185,129,.15)";
+
+        }
+
+        chart.update();
+
+        });
+
+        });
+
+        }
+
+        const statusCtx=document.getElementById('statusChart');
+
+        if(statusCtx){
+
+        new Chart(statusCtx,{
+
+        type:'doughnut',
+
+        data:{
+
+        labels:['Pending','Preparing','Delivered','Cancelled'],
+
+        datasets:[{
+
+        data:[
+        @ViewBag.PendingOrders,
+        @ViewBag.PreparingOrders,
+        @ViewBag.DeliveredOrders,
+        @ViewBag.CancelledOrders
+        ],
+
+        backgroundColor:[
+
+        '#f59e0b',
+
+        '#3b82f6',
+
+        '#10b981',
+
+        '#ef4444'
+
+        ]
+
+        }]
+
+        },
+
+        options:{
+
+        plugins:{
+
+        legend:{
+
+        position:'bottom'
+
+        }
+
+        }
+
+        }
+
+        });
+
+        }
+
+
+
+        function getRelativeTime(date){
+
+        const now=new Date();
+
+        const seconds=Math.floor((now-date)/1000);
+
+        if(seconds<60)
+        return "Just now";
+
+        const minutes=Math.floor(seconds/60);
+
+        if(minutes<60)
+        return minutes+" min ago";
+
+        const hours=Math.floor(minutes/60);
+
+        if(hours<24)
+        return hours+" hour"+(hours>1?"s":"")+" ago";
+
+        const days=Math.floor(hours/24);
+
+        if(days===1)
+        return "Yesterday";
+
+        if(days<7)
+        return days+" days ago";
+
+        return date.toLocaleString("en-GB",{
+
+        day:"2-digit",
+
+        month:"short",
+
+        hour:"2-digit",
+
+        minute:"2-digit"
+
+        });
+
+        }
+
+        document.querySelectorAll(".activity-time").forEach(item=>{
+
+        const date=new Date(item.dataset.time);
+
+        item.innerText=getRelativeTime(date);
+
+        });
+
+    </script>
+
+}

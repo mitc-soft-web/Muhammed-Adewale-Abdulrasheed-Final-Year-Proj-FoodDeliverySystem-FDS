@@ -1,0 +1,316 @@
+﻿@model IEnumerable<FoodDeliverySystem.Models.FoodItem>
+
+@{
+    ViewData["Title"] = "Browse Full Menu";
+}
+
+<div class="menu-page">
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+
+                <i class="bi bi-grid"></i>
+
+                Browse Full Menu
+
+            </h1>
+
+            <p class="page-subtitle">
+
+                Discover delicious meals from every restaurant.
+
+            </p>
+
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create"
+               class="admin-action-card">
+
+                <div class="admin-action-icon">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                </div>
+
+                <div>
+
+                    <span class="admin-action-title">
+
+                        Add Food
+
+                    </span>
+
+                    <small>
+
+                        Create a new meal
+
+                    </small>
+
+                </div>
+
+            </a>
+        }
+
+    </div>
+
+    @if (!User.IsInRole("Admin"))
+    {
+        <div class="menu-search mb-5">
+
+            <div class="position-relative">
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <input id="searchInput"
+                           type="text"
+                           class="form-control"
+                           placeholder="Search On Food Xpress..." />
+
+                </div>
+
+                <div id="searchSuggestions"
+                     class="search-suggestions">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="searchCount"
+             class="mb-4 text-muted fw-semibold">
+            Showing @Model.Count() meals
+        </div>
+    }
+
+    <div id="foodContainer"
+         class="row g-4">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-xl-4 col-lg-6 mb-4 food-item-card"
+                 data-name="@item.Name"
+                 data-category="@item.FoodCategory?.Name"
+                 data-restaurant="@item.Restaurant?.Name"
+                 data-description="@item.Description">
+
+                <div class="restaurant-food-card">
+
+                    <div class="restaurant-food-image">
+
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" alt="@item.Name" />
+                        }
+                        else
+                        {
+                            <img src="/images/hero.jpg" alt="@item.Name" />
+                        }
+
+                        @if (item.IsAvailable)
+                        {
+                            <span class="restaurant-status available">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Available
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="restaurant-status unavailable">
+
+                                <i class="bi bi-x-circle-fill"></i>
+
+                                Unavailable
+
+                            </span>
+                        }
+
+                    </div>
+
+                    <div class="restaurant-food-body">
+
+                        <div class="food-top">
+
+                            <h4>@item.Name</h4>
+
+                            <div class="food-price">
+
+                                ₦@item.Price.ToString("N0")
+
+                            </div>
+
+                        </div>
+
+                        <div class="food-tags">
+
+                            <span class="food-category">
+
+                                @item.FoodCategory?.Name
+
+                            </span>
+
+                            <span class="restaurant-name">
+
+                                <i class="bi bi-shop"></i>
+
+                                @item.Restaurant?.Name
+
+                            </span>
+
+                        </div>
+
+                        <p class="food-desc">
+
+                            @item.Description
+
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="food-time">
+
+                                <i class="bi bi-clock-history"></i>
+
+                                25–35 mins
+
+                            </div>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="dropdown">
+
+                                    <button class="admin-menu-btn"
+                                            data-bs-toggle="dropdown">
+
+                                        <i class="bi bi-three-dots-vertical"></i>
+
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+
+                                        <li>
+
+                                            <a class="dropdown-item"
+                                               asp-action="Edit"
+                                               asp-route-id="@item.Id">
+
+                                                <i class="bi bi-pencil-square me-2 text-primary"></i>
+
+                                                Edit Food
+
+                                            </a>
+
+                                        </li>
+
+                                        <li><hr class="dropdown-divider" /></li>
+
+                                        <li>
+
+                                            <a class="dropdown-item text-danger"
+                                               asp-action="Delete"
+                                               asp-route-id="@item.Id">
+
+                                                <i class="bi bi-trash3 me-2"></i>
+
+                                                Delete Food
+
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                            }
+                            else if (!item.Restaurant!.IsOpen)
+                            {
+                                <button class="btn-food disabled" disabled>
+
+                                    <i class="bi bi-lock-fill"></i>
+
+                                    Restaurant Closed
+
+                                </button>
+                            }
+                            else if (!item.IsAvailable)
+                            {
+                                <button class="btn-food disabled" disabled>
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                    Food Unavailable
+
+                                </button>
+                            }
+                            else if (User.IsInRole("Customer"))
+                            {
+                                <a asp-controller="Cart"
+                                   asp-action="AddToCart"
+                                   asp-route-foodId="@item.Id"
+                                   class="btn-food">
+
+                                    <i class="bi bi-cart-plus"></i>
+
+                                    Add to Cart
+
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Account"
+                                   asp-action="Login"
+                                   class="btn-food">
+
+                                    <i class="bi bi-box-arrow-in-right"></i>
+
+                                    Login to Order
+
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+<div id="noResults"
+     class="text-center py-5"
+     style="display:none;">
+
+    <i class="bi bi-search"
+       style="font-size:60px;color:#ff6b35;"></i>
+
+    <h3 class="mt-3">
+        No meals found
+    </h3>
+
+    <p class="text-muted">
+        Try searching for another food,
+        restaurant or category.
+    </p>
+
+</div>
+
+@section Scripts{
+
+    <script src="~/js/home-search.js"></script>
+
+}

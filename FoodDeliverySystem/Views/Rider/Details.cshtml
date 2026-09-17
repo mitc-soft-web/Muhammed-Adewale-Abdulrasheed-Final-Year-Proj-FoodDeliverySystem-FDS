@@ -1,0 +1,299 @@
+﻿@model FoodDeliverySystem.Models.DeliveryRider
+
+@{
+    ViewData["Title"] = "Rider Details";
+}
+
+<div class="admin-rider-details-page">
+
+    <!-- HERO -->
+
+    <div class="admin-rider-details-hero">
+
+        <div>
+
+            <div class="admin-rider-details-label">
+
+                <i class="bi bi-person-badge"></i>
+
+                RIDER APPLICATION
+
+            </div>
+
+            <h1 class="admin-rider-details-title">
+
+                Rider Details
+
+            </h1>
+
+            <p class="admin-rider-details-subtitle">
+
+                Review the rider application before approval.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- PROFILE -->
+
+    <div class="admin-rider-profile-card">
+
+        <div class="admin-rider-profile-left">
+
+            @if (!string.IsNullOrWhiteSpace(Model.ProfileImage))
+            {
+                <img src="~/uploads/profile/@Model.ProfileImage"
+                     class="admin-rider-profile-image" />
+            }
+            else
+            {
+                <div class="admin-rider-profile-placeholder">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+            }
+
+        </div>
+
+        <div class="admin-rider-profile-right">
+
+            <h2>
+
+                @Model.User?.FullName
+
+            </h2>
+
+            <p>
+
+                <i class="bi bi-envelope"></i>
+
+                @Model.User?.Email
+
+            </p>
+
+            <p>
+
+                <i class="bi bi-telephone"></i>
+
+                @Model.User?.PhoneNumber
+
+            </p>
+
+            <p>
+
+                <i class="bi bi-geo-alt"></i>
+
+                @Model.Address
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- INFORMATION GRID -->
+
+    <div class="admin-rider-info-grid">
+
+        <!-- VEHICLE -->
+
+        <div class="admin-rider-info-card">
+
+            <div class="admin-rider-info-title">
+
+                <i class="bi bi-bicycle"></i>
+
+                Vehicle Information
+
+            </div>
+
+            <div class="admin-rider-info-item">
+
+                <span>Vehicle Type</span>
+
+                <strong>@Model.VehicleType</strong>
+
+            </div>
+
+            <div class="admin-rider-info-item">
+
+                <span>Plate Number</span>
+
+                <strong>@Model.PlateNumber</strong>
+
+            </div>
+
+        </div>
+
+        <!-- LICENCE -->
+
+        <div class="admin-rider-info-card">
+
+            <div class="admin-rider-info-title">
+
+                <i class="bi bi-card-text"></i>
+
+                Driver Licence
+
+            </div>
+
+            <div class="admin-rider-info-item">
+
+                <span>Licence Number</span>
+
+                <strong>@Model.DriverLicenseNumber</strong>
+
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.DriverLicenseImage))
+            {
+                @* <div class="admin-rider-license-preview">
+
+                    <img src="~/uploads/licenses/@Model.DriverLicenseImage"
+                         class="admin-rider-license-image" />
+
+                </div> *@
+
+                <a href="~/uploads/licenses/@Model.DriverLicenseImage"
+                   target="_blank"
+                   class="admin-rider-license-view">
+
+                    <i class="bi bi-eye"></i>
+
+                    View Licence File
+
+                </a>
+            }
+
+        </div>
+
+        <!-- APPLICATION -->
+
+        <div class="admin-rider-info-card">
+
+            <div class="admin-rider-info-title">
+
+                <i class="bi bi-calendar-event"></i>
+
+                Application
+
+            </div>
+
+            <div class="admin-rider-info-item">
+
+                <span>Applied On</span>
+
+                <strong>@Model.CreatedAt.ToString("dd MMM yyyy")</strong>
+
+            </div>
+
+            <div class="admin-rider-info-item">
+
+                <span>Status</span>
+
+                <strong>@Model.Status</strong>
+
+            </div>
+
+            <div class="admin-rider-info-item">
+
+                <span>Availability</span>
+
+                <strong>
+
+                    @(Model.IsAvailable ? "Available" : "Unavailable")
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- DECISION PANEL -->
+
+    <div class="admin-rider-decision-card">
+
+        <div class="admin-rider-info-title">
+
+            <i class="bi bi-shield-check"></i>
+
+            Application Decision
+
+        </div>
+
+        @if (Model.Status == "Pending")
+        {
+
+            <div class="admin-rider-decision-buttons">
+
+                <a asp-action="Approve"
+                   asp-route-id="@Model.Id"
+                   class="admin-rider-approve-btn submit-loading-btn"
+                   data-loading="Approving Rider...">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Approve Rider
+
+                </a>
+
+                <a asp-action="Reject"
+                   asp-route-id="@Model.Id"
+                   class="admin-rider-reject-btn submit-loading-btn"
+                   data-loading="Rejecting Rider...">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Reject Rider
+
+                </a>
+
+            </div>
+
+        }
+        else if (Model.Status == "Approved")
+        {
+
+            <div class="admin-rider-final-status approved">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+                This rider has already been approved.
+
+            </div>
+
+        }
+        else
+        {
+
+            <div class="admin-rider-final-status rejected">
+
+                <i class="bi bi-x-circle-fill"></i>
+
+                This rider has been rejected.
+
+            </div>
+
+        }
+
+    </div>
+
+    <div class="admin-rider-back">
+
+        <a asp-action="Index"
+           class="admin-rider-back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Applications
+
+        </a>
+
+    </div>
+
+</div>

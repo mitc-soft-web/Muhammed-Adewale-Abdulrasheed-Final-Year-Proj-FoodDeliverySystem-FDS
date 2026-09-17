@@ -1,0 +1,244 @@
+﻿@model FoodDeliverySystem.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="container py-3 login-page">
+
+    <div class="row align-items-center g-2">
+
+        <!-- LEFT SIDE -->
+
+        <div class="col-lg-6 text-center d-flex flex-column justify-content-center">
+
+            <div class="mb-3">
+
+                <img src="~/images/logo-light.png"
+                     alt="Food Xpress"
+                     class="img-fluid login-logo" />
+
+            </div>
+
+            <h3 class="fw-bold login-title">
+
+                Join Food Xpress Today.
+
+            </h3>
+
+            <p class="lead text-muted login-subtitle">
+
+                Create your account and enjoy fast food delivery from your favourite restaurants.
+
+            </p>
+
+            <img src="~/images/login-illustration.png"
+                 class="img-fluid login-illustration mt-3"
+                 alt="Food Delivery" />
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="col-lg-5 offset-lg-1">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+
+                        <h2 class="fw-bold">
+
+                            Create Account
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            Start ordering delicious meals today.
+
+                        </p>
+
+                    </div>
+
+                    <form asp-action="Register" method="post">
+
+                        <div asp-validation-summary="All"
+                             class="text-danger mb-3"></div>
+
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger rounded-3">
+
+                                <i class="bi bi-exclamation-circle me-2"></i>
+
+                                @TempData["Error"]
+
+                            </div>
+                        }
+
+                        <div class="mb-3">
+
+                            <label asp-for="FullName" class="form-label fw-semibold"></label>
+
+                            <div class="position-relative">
+
+                                <i class="bi bi-person input-icon"></i>
+
+                                <input asp-for="FullName"
+                                       class="form-control login-input"
+                                       placeholder="Enter your full name" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Email" class="form-label fw-semibold"></label>
+
+                            <div class="position-relative">
+
+                                <i class="bi bi-envelope input-icon"></i>
+
+                                <input asp-for="Email"
+                                       type="email"
+                                       class="form-control login-input email-validation"
+                                       autocomplete="email"
+                                       placeholder="Enter your email address" />
+
+                                <small id="emailValidation"
+                                       class="text-danger d-none"></small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
+
+                            <div class="position-relative">
+
+                                <i class="bi bi-telephone input-icon"></i>
+
+                                <input asp-for="PhoneNumber"
+                                       class="form-control login-input"
+                                       placeholder="Enter your phone number" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Password" class="form-label fw-semibold"></label>
+
+                            <div class="position-relative">
+
+                                <i class="bi bi-lock input-icon"></i>
+
+                                <input asp-for="Password"
+                                       id="passwordInput"
+                                       class="form-control login-input password-input"
+                                       placeholder="Create a password" />
+
+                                <i class="bi bi-eye password-toggle"
+                                   id="togglePassword"></i>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
+
+                            <div class="position-relative">
+
+                                <i class="bi bi-shield-lock input-icon"></i>
+
+                                <input asp-for="ConfirmPassword"
+                                       id="confirmPasswordInput"
+                                       class="form-control login-input password-input"
+                                       placeholder="Confirm your password" />
+
+                                <i class="bi bi-eye password-toggle"
+                                   id="toggleConfirmPassword"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="btn btn-lg w-100 rounded-3 text-white submit-loading-btn"
+                                style="background:linear-gradient(90deg,#ff6b35,#ff9f1c);border:none;"
+                                data-loading="Creating Account Please Wait...">
+
+                            <i class="bi bi-person-plus-fill me-2"></i>
+                            Create Account
+
+                        </button>
+
+                    </form>
+
+                    <hr />
+
+                    <div class="text-center">
+
+                        Already have an account?
+
+                        <a asp-action="Login"
+                           class="fw-bold text-decoration-none"
+                           style="color:#ff6b35;">
+
+                            Login
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    @* <script src="~/js/email-validation.js"></script> *@
+
+    <script>
+        function togglePassword(inputId, iconId){
+
+            const input=document.getElementById(inputId);
+            const icon=document.getElementById(iconId);
+
+            icon.addEventListener("click",function(){
+
+                if(input.type==="password"){
+                    input.type="text";
+                    icon.classList.replace("bi-eye","bi-eye-slash");
+                }
+                else{
+                    input.type="password";
+                    icon.classList.replace("bi-eye-slash","bi-eye");
+                }
+
+            });
+
+        }
+
+        togglePassword("passwordInput","togglePassword");
+        togglePassword("confirmPasswordInput","toggleConfirmPassword");
+    </script>
+}

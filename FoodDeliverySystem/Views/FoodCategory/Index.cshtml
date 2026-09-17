@@ -1,0 +1,213 @@
+﻿@model IEnumerable<FoodDeliverySystem.Models.FoodCategory>
+
+@{
+    ViewData["Title"] = "Food Categories";
+}
+
+<div class="fx-page">
+
+    <div class="fx-header">
+
+        <div>
+
+            <h2>
+
+                Food Categories
+
+            </h2>
+
+            <p>
+
+                Organize and manage every food category on Food Xpress.
+
+            </p>
+
+        </div>
+
+        <a asp-action="Create"
+           class="fx-add-card">
+
+            <div class="fx-add-icon">
+
+                <i class="bi bi-plus-lg"></i>
+
+            </div>
+
+            <div>
+
+                <h5>
+
+                    Add Category
+
+                </h5>
+
+                <span>
+
+                    Create a new category
+
+                </span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <div class="fx-stats">
+
+        <div class="fx-stat-card">
+
+            <i class="bi bi-grid"></i>
+
+            <div>
+
+                <h3>@Model.Count()</h3>
+
+                <span>Total Categories</span>
+
+            </div>
+
+        </div>
+
+        <div class="fx-stat-card">
+
+            <i class="bi bi-basket"></i>
+
+            <div>
+
+                <h3>@ViewBag.TotalFoods</h3>
+
+                <span>Total Foods</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="fx-search">
+
+        <i class="bi bi-search"></i>
+
+        <input id="categorySearch"
+               placeholder="Search categories...">
+
+    </div>
+
+    <div class="fx-table">
+
+        @foreach (var item in Model)
+        {
+
+            <div class="fx-row">
+
+                <div class="fx-category">
+
+                    <div class="fx-circle">
+
+                        @item.Name.Substring(0, 1).ToUpper()
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+
+                            @(char.ToUpper(item.Name[0]) + item.Name.Substring(1))
+
+                        </strong>
+
+                        <div class="fx-category-meta">
+
+                            <i class="bi bi-box-seam"></i>
+
+                            @(item.FoodItems.Count == 1
+                                ? "1 Food"
+                                : $"{item.FoodItems.Count} Foods")
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
+                <div class="dropdown">
+
+                    <button class="btn fx-dot-btn"
+                            data-bs-toggle="dropdown">
+
+                        <i class="bi bi-three-dots-vertical"></i>
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                        <li>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@item.Id"
+                               class="dropdown-item">
+
+                                <i class="bi bi-pencil me-2"></i>
+
+                                Edit
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.Id"
+                               class="dropdown-item text-danger">
+
+                                <i class="bi bi-trash me-2"></i>
+
+                                Delete
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+                }
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
+
+@section Scripts{
+
+    <script>
+
+        document.getElementById("categorySearch")
+        .addEventListener("keyup",function(){
+
+            let keyword=this.value.toLowerCase();
+
+            document.querySelectorAll(".fx-row").forEach(function(row){
+
+                let text=row.innerText.toLowerCase();
+
+                row.style.display=text.includes(keyword)
+                    ? ""
+                    : "none";
+
+            });
+
+        });
+
+    </script>
+
+}

@@ -1,0 +1,172 @@
+﻿@model FoodDeliverySystem.ViewModels.AdminProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="admin-profile-page">
+
+    <div class="admin-profile-header">
+
+        <div>
+
+            <span class="admin-page-tag">
+
+                <i class="bi bi-pencil-square"></i>
+
+                ACCOUNT SETTINGS
+
+            </span>
+
+            <h1>Edit Profile</h1>
+
+            <p>
+                Update your account information.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="admin-profile-card">
+
+        <form asp-action="EditProfile"
+              method="post">
+
+            <div class="row">
+
+                <!-- FULL NAME -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+
+                        <i class="bi bi-person"></i>
+
+                        Full Name
+
+                    </label>
+
+                    <input asp-for="FullName"
+                           class="form-control admin-input" />
+
+                    <span asp-validation-for="FullName"
+                          class="text-danger"></span>
+
+                </div>
+
+                <!-- EMAIL -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+
+                        <i class="bi bi-envelope"></i>
+
+                        Email Address
+
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control admin-input" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger"></span>
+
+                </div>
+
+                <!-- PHONE -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+
+                        <i class="bi bi-telephone"></i>
+
+                        Phone Number
+
+                    </label>
+
+                    <input asp-for="PhoneNumber"
+                           class="form-control admin-input" />
+
+                </div>
+
+                <!-- GENDER -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+
+                        <i class="bi bi-gender-ambiguous"></i>
+
+                        Gender
+
+                    </label>
+
+                    <select asp-for="Gender"
+                            class="form-select admin-input">
+
+                        <option value="">Select Gender</option>
+
+                        <option>Male</option>
+
+                        <option>Female</option>
+
+                    </select>
+
+                </div>
+
+                <!-- ADDRESS -->
+
+                <div class="col-12 mb-4">
+
+                    <label class="form-label">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        Address
+
+                    </label>
+
+                    <textarea asp-for="Address"
+                              rows="4"
+                              class="form-control admin-input"></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="d-flex gap-3">
+
+                <button type="submit"
+                        class="food-btn">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Save Changes
+
+                </button>
+
+                <a asp-action="Profile"
+                   class="food-btn-outline">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

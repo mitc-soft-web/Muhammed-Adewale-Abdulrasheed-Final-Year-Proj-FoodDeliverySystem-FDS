@@ -1,0 +1,265 @@
+﻿@model FoodDeliverySystem.Models.Restaurant
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container">
+
+    <!-- Restaurant Header -->
+    <div class="card border-0 shadow-lg mb-5" style="border-radius:20px;">
+
+        <div class="row g-0">
+
+            <div class="col-lg-4">
+
+                @if (!string.IsNullOrEmpty(Model.Logo))
+                {
+                    <img src="@Model.Logo"
+                         class="img-fluid w-100 h-100"
+                         style="object-fit:cover; min-height:320px;">
+                }
+                else
+                {
+                    <img src="/images/hero.jpg"
+                         class="img-fluid w-100 h-100"
+                         style="object-fit:cover; min-height:320px;">
+                }
+
+            </div>
+
+            <div class="col-lg-8">
+
+                <div class="card-body p-5">
+
+                    <h1 class="restaurant-title">
+                        @Model.Name
+                    </h1>
+
+                    <div class="restaurant-meta">
+
+                        @if (Model.IsOpen)
+                        {
+                            <span class="restaurant-badge open">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Open
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="restaurant-badge closed">
+
+                                <i class="bi bi-x-circle-fill"></i>
+
+                                Closed
+
+                            </span>
+                        }
+
+                        <span class="restaurant-badge rating">
+
+                            <i class="bi bi-star-fill"></i>
+
+                            4.8
+
+                        </span>
+
+                        <span class="restaurant-badge foods">
+
+                            <i class="bi bi-grid"></i>
+
+                            @Model.FoodItems.Count Meals
+
+                        </span>
+
+                    </div>
+
+                    <p class="restaurant-location">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        @Model.Address
+
+                    </p>
+
+                    <p class="restaurant-description">
+                        @(string.IsNullOrWhiteSpace(Model.Description)
+                        ? "Enjoy freshly prepared meals delivered quickly to your doorstep."
+                        : Model.Description)
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>
+
+                <i class="bi bi-grid"></i>
+
+                Restaurant Menu
+
+            </h2>
+
+            <p>
+
+                Browse all meals prepared by this restaurant.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        @foreach (var item in Model.FoodItems)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="restaurant-food-card">
+
+                    <div class="restaurant-food-image">
+
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl"
+                                 alt="@item.Name">
+                        }
+                        else
+                        {
+                            <img src="/images/hero.jpg"
+                                 alt="@item.Name">
+                        }
+
+                        @if (item.IsAvailable)
+                        {
+                            <span class="restaurant-status available">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Available
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="restaurant-status unavailable">
+
+                                <i class="bi bi-x-circle-fill"></i>
+
+                                Unavailable
+
+                            </span>
+                        }
+
+                    </div>
+
+                    <div class="restaurant-food-body">
+
+                        <div class="food-top">
+
+                            <h4>@item.Name</h4>
+
+                            <div class="food-price">
+
+                                ₦@item.Price.ToString("N0")
+
+                            </div>
+
+                        </div>
+
+                        <span class="food-category">
+
+                            @item.FoodCategory?.Name
+
+                        </span>
+
+                        <p class="food-desc">
+
+                            @item.Description
+
+                        </p>
+
+                        <div class="food-bottom">
+
+                            <div class="food-time">
+
+                                <i class="bi bi-clock-history"></i>
+
+                                25–35 mins
+
+                            </div>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <!-- Admin only views the menu.
+             No action button is displayed. -->
+                            }
+                            else if (!Model.IsOpen)
+                            {
+                                <button class="btn-food disabled" disabled>
+
+                                    <i class="bi bi-lock-fill"></i>
+
+                                    Restaurant Closed
+
+                                </button>
+                            }
+                            else if (!item.IsAvailable)
+                            {
+                                <button class="btn-food disabled" disabled>
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                    Food Unavailable
+
+                                </button>
+                            }
+                            else if (User.IsInRole("Customer"))
+                            {
+                                <a asp-controller="Cart"
+                                   asp-action="AddToCart"
+                                   asp-route-foodId="@item.Id"
+                                   class="btn-food">
+
+                                    <i class="bi bi-cart-plus"></i>
+
+                                    Add to Cart
+
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Account"
+                                   asp-action="Login"
+                                   class="btn-food">
+
+                                    <i class="bi bi-box-arrow-in-right"></i>
+
+                                    Login to Order
+
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

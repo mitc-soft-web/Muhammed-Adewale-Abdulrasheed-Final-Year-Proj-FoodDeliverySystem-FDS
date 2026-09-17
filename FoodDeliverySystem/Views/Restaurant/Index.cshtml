@@ -1,0 +1,253 @@
+﻿@model IEnumerable<FoodDeliverySystem.Models.Restaurant>
+
+@{
+    ViewData["Title"] = "Restaurants";
+}
+
+<div class="container py-4">
+
+    <div class="section-header mb-5">
+
+        <div>
+
+            <h2 class="section-title">
+
+                <i class="bi bi-shop"></i>
+
+                Restaurants
+
+            </h2>
+
+            <p class="section-subtitle">
+
+                Discover restaurants serving fresh meals near you.
+
+            </p>
+
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create"
+               class="admin-action-card">
+
+                <div class="admin-action-icon">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                </div>
+
+                <div>
+
+                    <span class="admin-action-title">
+
+                        Add Restaurant
+
+                    </span>
+
+                    <small>
+
+                        Register a new restaurant
+
+                    </small>
+
+                </div>
+
+            </a>
+        }
+
+    </div>
+
+    <div class="row g-4">
+
+        @foreach (var restaurant in Model)
+        {
+            <div class="col-xl-4 col-lg-6">
+
+                <div class="restaurant-card">
+
+                    <div class="restaurant-image">
+
+                        @if (!string.IsNullOrEmpty(restaurant.CoverImage))
+                        {
+                            <img src="@restaurant.CoverImage"
+                                 alt="@restaurant.Name" />
+                        }
+                        else if (!string.IsNullOrEmpty(restaurant.Logo))
+                        {
+                            <img src="@restaurant.Logo"
+                                 alt="@restaurant.Name" />
+                        }
+                        else
+                        {
+                            <img src="/images/hero.jpg"
+                                 alt="@restaurant.Name" />
+                        }
+
+                        <div class="restaurant-logo">
+
+                            @if (!string.IsNullOrEmpty(restaurant.Logo))
+                            {
+                                <img src="@restaurant.Logo"
+                                     alt="@restaurant.Name" />
+                            }
+                            else
+                            {
+                                <img src="/images/logo-placeholder.png"
+                                     alt="@restaurant.Name" />
+                            }
+
+                        </div>
+
+                        @if (restaurant.IsOpen)
+                        {
+                            <span class="restaurant-status available">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Open
+
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="restaurant-status unavailable">
+
+                                <i class="bi bi-x-circle-fill"></i>
+
+                                Closed
+
+                            </span>
+                        }
+
+                    </div>
+
+                    <div class="restaurant-content">
+
+                        <div class="restaurant-top">
+
+                            <h3>
+
+                                @restaurant.Name
+
+                            </h3>
+
+                            <span class="restaurant-rating">
+
+                                <i class="bi bi-star-fill"></i>
+
+                                4.8
+
+                            </span>
+
+                        </div>
+
+                        <div class="restaurant-tags">
+
+                            <span>Local Cuisine</span>
+
+                            <span>Fast Delivery</span>
+
+                            <span>Top Rated</span>
+
+                        </div>
+
+                        <p class="restaurant-address">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            @restaurant.Address
+
+                        </p>
+
+                        <p class="restaurant-description">
+
+                            @(restaurant.Description ??
+                              "Freshly prepared meals delivered quickly to your doorstep.")
+
+                        </p>
+
+                        <div class="restaurant-footer">
+
+                            <span class="delivery-time">
+
+                                <i class="bi bi-clock"></i>
+
+                                <strong>25–35 mins</strong>
+
+                            </span>
+
+                            <a asp-action="Details"
+                               asp-route-id="@restaurant.Id"
+                               class="restaurant-btn">
+
+                                View Restaurant
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </a>
+
+                        </div>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="restaurant-admin">
+
+                                <div class="dropdown">
+
+                                    <button class="admin-menu-btn"
+                                            data-bs-toggle="dropdown">
+
+                                        <i class="bi bi-three-dots-vertical"></i>
+
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+
+                                        <li>
+
+                                            <a class="dropdown-item"
+                                               asp-action="Edit"
+                                               asp-route-id="@restaurant.Id">
+
+                                                <i class="bi bi-pencil-square me-2 text-primary"></i>
+
+                                                Edit Restaurant
+
+                                            </a>
+
+                                        </li>
+
+                                        <li><hr class="dropdown-divider" /></li>
+
+                                        <li>
+
+                                            <a class="dropdown-item text-danger"
+                                               asp-action="Delete"
+                                               asp-route-id="@restaurant.Id">
+
+                                                <i class="bi bi-trash3 me-2"></i>
+
+                                                Delete Restaurant
+
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

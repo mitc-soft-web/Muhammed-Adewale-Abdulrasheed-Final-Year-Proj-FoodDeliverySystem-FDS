@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Resend Verification Email";
+}
+
+<div class="container py-3 login-page">
+
+    <div class="row align-items-center g-2">
+
+        <!-- LEFT SIDE -->
+
+        <div class="col-lg-6 text-center d-flex flex-column justify-content-center">
+
+            <div class="mb-3">
+
+                <img src="~/images/logo-light.png"
+                     class="img-fluid login-logo"
+                     alt="Food Xpress" />
+
+            </div>
+
+            <h3 class="fw-bold login-title">
+
+                Verify Your Email
+
+            </h3>
+
+            <p class="text-muted login-subtitle">
+
+                Didn't receive your verification email?
+                Enter your email address below and we'll send you a new verification link.
+
+            </p>
+
+            <img src="~/images/login-illustration.png"
+                 class="img-fluid login-illustration d-none d-lg-block"
+                 alt="Verify Email" />
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="col-lg-5 offset-lg-1">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <div class="card-body p-5">
+
+                    <div class="text-center mb-4">
+
+                        <h2 class="fw-bold">
+
+                            Resend Verification
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            Enter your registered email address.
+
+                        </p>
+
+                    </div>
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success rounded-3">
+
+                            <i class="bi bi-check-circle me-2"></i>
+
+                            @TempData["Success"]
+
+                        </div>
+                    }
+
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger rounded-3">
+
+                            <i class="bi bi-exclamation-circle me-2"></i>
+
+                            @TempData["Error"]
+
+                        </div>
+                    }
+
+                    <form asp-action="ResendVerification"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Email Address
+
+                            </label>
+
+                            <div class="position-relative">
+
+                                <i class="bi bi-envelope input-icon"></i>
+
+                                <input type="email"
+                                       name="email"
+                                       class="form-control login-input email-validation"
+                                       placeholder="Enter your email address"
+                                       autocomplete="email"
+                                       required />
+
+                            </div>
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-lg w-100 rounded-3 text-white"
+                                style="background:linear-gradient(90deg,#ff6b35,#ff9f1c);border:none;">
+
+                            <i class="bi bi-send me-2"></i>
+
+                            Resend Verification Email
+
+                        </button>
+
+                    </form>
+
+                    <hr />
+
+                    <div class="text-center">
+
+                        <a asp-action="Login"
+                           class="fw-bold text-decoration-none"
+                           style="color:#ff6b35;">
+
+                            Back to Login
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/email-validation.js"></script>
+}

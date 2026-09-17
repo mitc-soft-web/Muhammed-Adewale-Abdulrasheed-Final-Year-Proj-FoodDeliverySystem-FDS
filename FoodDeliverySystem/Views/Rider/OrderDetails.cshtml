@@ -1,0 +1,617 @@
+﻿@model FoodDeliverySystem.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header border-0 text-white p-4"
+             style="background:linear-gradient(135deg,#0d6efd,#6610f2);">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-8">
+
+                    <h2 class="fw-bold mb-2">
+
+                        📦 Order #@Model.Id
+
+                    </h2>
+
+                    <p class="mb-0">
+
+                        @Model.OrderDate.ToString("dddd, dd MMM yyyy • hh:mm tt")
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+                    @if (Model.Status == "Ready for Pickup")
+                    {
+                        <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+
+                            🟡 Ready for Pickup
+
+                        </span>
+                    }
+                    else if (Model.Status == "Out for Delivery")
+                    {
+                        <span class="badge bg-info fs-6 px-3 py-2">
+
+                            🚚 Out for Delivery
+
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success fs-6 px-3 py-2">
+
+                            ✅ Delivered
+
+                        </span>
+                    }
+
+                    <br /><br />
+
+                    @if (Model.PaymentMethod == "Cash on Delivery")
+                    {
+                        <span class="badge bg-warning text-dark px-3 py-2">
+
+                            💵 Cash on Delivery
+
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success px-3 py-2">
+
+                            💳 Paid Online
+
+                        </span>
+                    }
+
+                    <h3 class="fw-bold mt-3">
+
+                        ₦@Model.TotalAmount.ToString("N0")
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- CUSTOMER -->
+
+                <div class="col-lg-6" style="padding:30px;">
+
+                    <div class="card border-0 shadow-lg h-100"
+                         style="border-radius:18px;">
+
+                        <div class="card-body p-4">
+
+                            <h4 class="fw-bold mb-4">
+
+                                👤 Customer Information
+
+                            </h4>
+
+                            <div class="d-flex align-items-center mb-4">
+
+                                <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                                     style="width:70px;height:70px;font-size:30px;">
+
+                                    👤
+
+                                </div>
+
+                                <div class="ms-3">
+
+                                    <h5 class="fw-bold mb-1">
+
+                                        @Model.Customer?.FullName
+
+                                    </h5>
+
+                                    <span class="badge bg-success">
+
+                                        Customer
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <hr />
+
+                            <p class="mb-3">
+
+                                <strong>📞 Phone</strong><br />
+
+                                @Model.PhoneNumber
+
+                            </p>
+
+                            <p class="mb-4">
+
+                                <strong>📍 Delivery Address</strong><br />
+
+                                @Model.DeliveryAddress
+
+                            </p>
+
+                            <div class="d-grid gap-2">
+
+                                <a href="tel:@Model.PhoneNumber"
+                                   class="btn btn-success">
+
+                                    📞 Call Customer
+
+                                </a>
+
+                                <a href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(Model.DeliveryAddress)"
+                                   target="_blank"
+                                   class="btn btn-outline-primary">
+
+                                    🗺 Open in Google Maps
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- PAYMENT -->
+                <div class="col-lg-6" style="padding:30px;">
+
+                    <div class="card border-0 shadow-lg h-100"
+                         style="border-radius:18px;">
+
+                        <div class="card-body p-4">
+
+                            <h4 class="fw-bold mb-4">
+
+                                💳 Payment Summary
+
+                            </h4>
+
+                            @if (Model.PaymentMethod == "Cash on Delivery")
+                            {
+                                <div class="alert alert-warning border-0">
+
+                                    <h5 class="fw-bold mb-1">
+
+                                        💵 Cash on Delivery
+
+                                    </h5>
+
+                                    <small>
+
+                                        Customer will pay upon delivery.
+
+                                    </small>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-success border-0">
+
+                                    <h5 class="fw-bold mb-1">
+
+                                        💳 Paid Online
+
+                                    </h5>
+
+                                    <small>
+
+                                        Payment already completed.
+
+                                    </small>
+
+                                </div>
+                            }
+
+                            <hr />
+
+                            <div class="d-flex justify-content-between mb-3">
+
+                                <strong>
+
+                                    Order Amount
+
+                                </strong>
+
+                                <span class="fw-bold text-success fs-4">
+
+                                    ₦@Model.TotalAmount.ToString("N0")
+
+                                </span>
+
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-3">
+
+                                <strong>
+
+                                    Payment Status
+
+                                </strong>
+
+                                @if (Model.PaymentMethod == "Cash on Delivery")
+                                {
+                                    <span class="badge bg-warning text-dark">
+
+                                        🟡 Pending Collection
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+
+                                        🟢 Payment Successful
+
+                                    </span>
+                                }
+
+                            </div>
+
+                            <hr />
+
+                            @if (Model.PaymentMethod == "Cash on Delivery")
+                            {
+                                <div class="text-center">
+
+                                    <h5 class="fw-bold text-warning">
+
+                                        💰 Remember to collect cash before completing delivery.
+
+                                    </h5>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center">
+
+                                    <h5 class="fw-bold text-success">
+
+                                        ✔ Customer has already paid.
+
+                                    </h5>
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+
+            <!-- RESTAURANT -->
+            <div class="card border-0 shadow-lg mb-4"
+                 style="border-radius:18px;">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">
+
+                        🏪 Restaurant
+
+                    </h4>
+
+                    @{
+                        var restaurant =
+                        Model.OrderItems
+                            .FirstOrDefault()?
+                            .FoodItem?
+                            .Restaurant;
+                    }
+
+                    <div class="row">
+
+                        <div class="col-md-8">
+
+                            <h5 class="fw-bold">
+
+                                @(restaurant?.Name ?? "Restaurant")
+
+                            </h5>
+
+                            <p class="text-muted mb-0">
+
+                                This order was prepared here.
+
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+                            <span class="badge bg-primary fs-6">
+
+                                🍽 Restaurant
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ORDER ITEMS -->
+
+            <div class="card border-0 shadow-lg mb-4"
+                 style="border-radius:18px;">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">
+
+                        🍔 Ordered Items
+
+                    </h4>
+
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <div class="card border-0 shadow-sm mb-3">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+
+                                        <h5 class="fw-bold mb-1">
+
+                                            🍽 @item.FoodItem?.Name
+
+                                        </h5>
+
+                                        <small class="text-muted">
+
+                                            Quantity:
+                                            @item.Quantity
+
+                                        </small>
+
+                                    </div>
+
+                                    <span class="badge bg-primary fs-6">
+
+                                        x @item.Quantity
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+                <!-- DELIVERY ACTION -->
+
+                <div class="card border-0 shadow-lg mt-4"
+                     style="border-radius:18px;">
+
+                    <div class="card-body text-center p-4">
+
+                        <h3 class="fw-bold mb-4">
+
+                            🚚 Delivery Action
+
+                        </h3>
+
+                        @if (Model.Status == "Ready for Pickup")
+                        {
+                            <div class="alert alert-warning">
+
+                                <h5 class="fw-bold">
+
+                                    ⚠ Delivery Not Accepted
+
+                                </h5>
+
+                                <p class="mb-3">
+
+                                    You must accept this delivery before you can complete it.
+
+                                </p>
+
+                                <a asp-action="AcceptOrder"
+                                   asp-route-id="@Model.Id"
+                                   class="btn btn-success">
+
+                                    🟢 Accept Delivery
+
+                                </a>
+
+                            </div>
+                        }
+                        else if (Model.Status == "Out for Delivery")
+                        {
+                            @if (Model.PaymentMethod == "Cash on Delivery")
+                            {
+                                <button class="btn btn-warning btn-lg px-5"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cashModal">
+
+                                    💵 Collect Cash & Complete Delivery
+
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-success btn-lg px-5"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#onlineModal">
+
+                                    ✅ Complete Delivery
+
+                                </button>
+                            }
+                        }
+                        else if (Model.Status == "Delivered")
+                        {
+                            <button class="btn btn-success btn-lg px-5" disabled>
+
+                                ✔ Delivery Completed
+
+                            </button>
+                        }
+
+                    </div>
+
+                </div>
+
+        </div>
+
+    </div>
+
+        <div class="modal fade" id="cashModal" tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header bg-warning">
+
+                        <h5 class="modal-title">
+
+                            💵 Cash Collection
+
+                        </h5>
+
+                    </div>
+
+                    <div class="modal-body text-center">
+
+                        <h4>
+
+                            Have you collected
+
+                        </h4>
+
+                        <h2 class="fw-bold text-success">
+
+                            ₦@Model.TotalAmount.ToString("N0")
+
+                        </h2>
+
+                        <p>
+
+                            from the customer?
+
+                        </p>
+
+                        <p class="text-danger">
+
+                            This action cannot be undone.
+
+                        </p>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+                        <a asp-action="CompleteOrder"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-warning">
+
+                            Yes, Cash Collected
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal fade" id="onlineModal" tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header bg-success text-white">
+
+                        <h5 class="modal-title">
+
+                            Confirm Delivery
+
+                        </h5>
+
+                    </div>
+
+                    <div class="modal-body text-center">
+
+                        <h4>
+
+                            Confirm this order has been delivered?
+
+                        </h4>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+                        <a asp-action="CompleteOrder"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-success">
+
+                            Confirm Delivery
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

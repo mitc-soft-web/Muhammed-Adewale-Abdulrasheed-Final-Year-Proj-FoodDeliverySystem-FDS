@@ -1,0 +1,44 @@
+﻿<ul class="navbar-nav me-auto">
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Rider"
+           asp-action="Dashboard">
+
+            🏠 Dashboard
+
+        </a>
+    </li>
+
+    <li class="nav-item">
+
+        <a class="nav-link"
+           asp-controller="Rider"
+           asp-action="AssignedOrders">
+
+            📦 Assigned Orders
+
+            @if (ViewBag.NewOrdersCount != null && ViewBag.NewOrdersCount > 0)
+            {
+                <span class="badge bg-danger ms-1">
+                    @ViewBag.NewOrdersCount
+                </span>
+            }
+
+        </a>
+
+    </li>
+
+    <li class="nav-item">
+
+        <a class="nav-link"
+           asp-controller="Rider"
+           asp-action="DeliveryHistory">
+
+            📜 Delivery History
+
+        </a>
+
+    </li>
+
+</ul>

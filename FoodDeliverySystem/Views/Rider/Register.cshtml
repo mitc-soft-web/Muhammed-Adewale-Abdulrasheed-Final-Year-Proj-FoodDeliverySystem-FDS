@@ -1,0 +1,443 @@
+﻿@model FoodDeliverySystem.ViewModels.RiderRegisterViewModel
+
+@{
+    ViewData["Title"] = "Become a Rider";
+}
+
+<div class="container rider-page">
+
+    <div class="row align-items-center g-2">
+
+        <!-- LEFT SIDE -->
+
+        <div class="col-lg-6 text-center d-flex flex-column justify-content-center rider-left">
+
+            <div class="mb-2">
+
+                <img src="~/images/logo-light.png"
+                     class="img-fluid login-logo"
+                     alt="Food Xpress" />
+
+            </div>
+
+            <h3 class="fw-bold login-title mb-2">
+
+                Become a Food Xpress Rider
+
+            </h3>
+
+            <p class="text-muted login-subtitle mb-3">
+
+                Join our delivery team and earn money delivering delicious meals safely and on time.
+
+            </p>
+
+            <img src="~/images/login-illustration.png"
+                 class="img-fluid rider-illustration d-none d-lg-block"
+                 alt="Food Xpress Rider" />
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="col-lg-5 rider-card offset-lg-1">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="text-center mb-4">
+
+                        <h2 class="fw-bold">
+
+                            Rider Registration
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            Complete the form below to join our delivery team.
+
+                        </p>
+
+                    </div>
+
+                    <form asp-action="Register"
+                          method="post"
+                          enctype="multipart/form-data">
+
+                        <div asp-validation-summary="All"
+                             class="text-danger mb-3"></div>
+
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger rounded-3 mb-3">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i>
+                                @TempData["Error"]
+                            </div>
+                        }
+
+                        <div class="row">
+
+                            <!-- FULL NAME -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="FullName"
+                                       class="form-label fw-semibold"></label>
+
+                                <div class="position-relative">
+
+                                    <i class="bi bi-person input-icon"></i>
+
+                                    <input asp-for="FullName"
+                                           class="form-control login-input"
+                                           placeholder="Enter your full name" />
+
+                                </div>
+
+                            </div>
+
+                            <!-- EMAIL -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Email"
+                                       class="form-label fw-semibold"></label>
+
+                                <div class="position-relative">
+
+                                    <i class="bi bi-envelope input-icon"></i>
+
+                                    <input asp-for="Email"
+                                           type="email"
+                                           class="form-control login-input email-validation"
+                                           autocomplete="email"
+                                           placeholder="Enter your email address" />
+
+                                    <span asp-validation-for="Email"
+                                          class="text-danger small"></span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <!-- PHONE -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="PhoneNumber"
+                                       class="form-label fw-semibold"></label>
+
+                                <div class="position-relative">
+
+                                    <i class="bi bi-telephone input-icon"></i>
+
+                                    <input asp-for="PhoneNumber"
+                                           class="form-control login-input"
+                                           placeholder="Enter your phone number" />
+
+                                </div>
+
+                            </div>
+
+                            <!-- VEHICLE -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="VehicleType"
+                                       class="form-label fw-semibold"></label>
+
+                                <div class="position-relative">
+
+                                    <i class="bi bi-bicycle input-icon"></i>
+
+                                    <select asp-for="VehicleType"
+                                            class="form-select login-input">
+
+                                        <option value="">Select Vehicle</option>
+
+                                        <option>Motorcycle</option>
+
+                                        <option>Bicycle</option>
+
+                                        <option>Electric Bike</option>
+
+                                        <option>Car</option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <!-- PASSWORD -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Password"
+                                       class="form-label fw-semibold"></label>
+
+                                <div class="position-relative">
+
+                                    <i class="bi bi-lock input-icon"></i>
+
+                                    <input asp-for="Password"
+                                           id="passwordInput"
+                                           class="form-control login-input password-input"
+                                           placeholder="Create your password" />
+
+                                    <i class="bi bi-eye password-toggle"
+                                       id="togglePassword"></i>
+
+                                </div>
+
+                            </div>
+
+                            <!-- CONFIRM PASSWORD -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="ConfirmPassword"
+                                       class="form-label fw-semibold"></label>
+
+                                <div class="position-relative">
+
+                                    <i class="bi bi-shield-lock input-icon"></i>
+
+                                    <input asp-for="ConfirmPassword"
+                                           id="confirmPasswordInput"
+                                           class="form-control login-input password-input"
+                                           placeholder="Confirm your password" />
+
+                                    <i class="bi bi-eye password-toggle"
+                                       id="toggleConfirmPassword"></i>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                            <!-- PLATE NUMBER -->
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="PlateNumber"
+                                       class="form-label fw-semibold"></label>
+
+                                <div class="position-relative">
+
+                                    <i class="bi bi-credit-card-2-front input-icon"></i>
+
+                                    <input asp-for="PlateNumber"
+                                           class="form-control login-input"
+                                           placeholder="Example: ABC-123XY" />
+
+                                </div>
+
+                                <small class="text-muted">
+                                    Example: ABC-123XY
+                                </small>
+
+                            </div>
+
+                            <!-- DRIVER LICENCE NUMBER -->
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="DriverLicenseNumber"
+                                       class="form-label fw-semibold"></label>
+
+                                <div class="position-relative">
+
+                                    <i class="bi bi-person-vcard input-icon"></i>
+
+                                    <input asp-for="DriverLicenseNumber"
+                                           class="form-control login-input"
+                                           placeholder="Example: DL-123456789" />
+
+                                </div>
+
+                                <small class="text-muted">
+                                    Example: DL-123456789
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <!-- DRIVER LICENCE FILE -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="DriverLicenseFile"
+                                   class="form-label fw-semibold"></label>
+
+                            <div class="upload-box">
+
+                                <i class="bi bi-cloud-arrow-up upload-icon"></i>
+
+                                <input asp-for="DriverLicenseFile"
+                                       type="file"
+                                       class="form-control upload-input"
+                                       id="licenceUpload"
+                                       accept=".jpg,.jpeg,.png,.pdf" />
+
+                                <div class="upload-text">
+
+                                    <strong>Click to upload your Driver Licence</strong>
+
+                                    <br>
+
+                                    <small class="text-muted">
+
+                                        JPG, PNG or PDF (Maximum 5MB)
+
+                                    </small>
+
+                                </div>
+
+                                <div id="fileName"
+                                     class="mt-2 fw-semibold text-success"></div>
+
+                            </div>
+
+                            <span asp-validation-for="DriverLicenseFile"
+                                  class="text-danger"></span>
+
+                        </div>
+
+<!-- ADDRESS -->
+
+<div class="mb-4">
+
+    <label asp-for="Address"
+           class="form-label fw-semibold"></label>
+
+    <div class="position-relative">
+
+        <i class="bi bi-geo-alt input-icon"></i>
+
+        <textarea asp-for="Address"
+                  class="form-control login-input"
+                  rows="4"
+                  style="padding-top:16px;"
+                  placeholder="Enter your residential address"></textarea>
+
+    </div>
+
+</div>
+
+                        <button type="submit"
+                                class="btn btn-lg w-100 rounded-3 text-white submit-loading-btn"
+                                style="background:linear-gradient(90deg,#ff6b35,#ff9f1c);border:none;"
+                                data-loading="Submitting Application Please Wait...">
+
+                            <i class="bi bi-bicycle me-2"></i>
+
+                            Apply as Rider
+
+                        </button>
+
+</form>
+
+<hr />
+
+<div class="text-center">
+
+    Already registered?
+
+    <a asp-controller="Account"
+       asp-action="Login"
+       class="fw-bold text-decoration-none"
+       style="color:#ff6b35;">
+
+        Login
+
+    </a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/email-validation.js"></script>
+
+<script>
+
+function togglePassword(inputId, iconId){
+
+    const input=document.getElementById(inputId);
+
+    const icon=document.getElementById(iconId);
+
+    icon.addEventListener("click",function(){
+
+        if(input.type==="password"){
+
+            input.type="text";
+
+            icon.classList.replace("bi-eye","bi-eye-slash");
+
+        }
+        else{
+
+            input.type="password";
+
+            icon.classList.replace("bi-eye-slash","bi-eye");
+
+        }
+
+    });
+
+}
+
+togglePassword("passwordInput","togglePassword");
+
+togglePassword("confirmPasswordInput","toggleConfirmPassword");
+
+
+        document.getElementById("licenceUpload").addEventListener("change", function () {
+
+            const fileName = document.getElementById("fileName");
+
+            if (this.files.length > 0) {
+
+                fileName.innerHTML =
+                    '<i class="bi bi-check-circle-fill me-2"></i>' +
+                    this.files[0].name;
+
+            }
+            else {
+
+                fileName.innerHTML = "";
+
+            }
+
+        });
+
+</script>
+
+}

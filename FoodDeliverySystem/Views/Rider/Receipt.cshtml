@@ -1,0 +1,556 @@
+﻿@model FoodDeliverySystem.Models.Order
+
+@{
+    ViewData["Title"] = "Delivery Receipt";
+}
+
+<div class="container mt-4 mb-5">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-body p-5">
+
+            <!-- HEADER -->
+
+            <div class="text-center">
+                <div class="text-center mb-4">
+
+                        <img src="~/images/logo-light.png"
+                             style="width:30%;" />
+
+                    <p class="text-muted mb-1">
+
+                        Fast • Fresh • Delivered
+
+                    </p>
+
+                    <span class="badge bg-dark px-4 py-2">
+
+                        DELIVERY RECEIPT
+
+                    </span>
+
+                </div>
+
+                <hr class="border-3 border-success opacity-75 mb-5" />
+
+            </div>
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+
+                    <h5 class="fw-bold text-success">
+
+                        📦 Order Information
+
+                    </h5>
+
+                    <p>
+
+                        <strong>Order Number:</strong>
+
+                        RCP-@Model.Id.ToString("D6")
+
+                    </p>
+
+                    <p>
+
+                        <strong>Date:</strong>
+
+                        @Model.OrderDate.ToString("dd MMM yyyy hh:mm tt")
+
+                    </p>
+
+                    <p>
+
+                        <strong>Status:</strong>
+
+                        <span class="badge bg-success">
+
+                            @Model.Status
+
+                        </span>
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <h5 class="fw-bold text-primary">
+
+                        👤 Customer Details
+
+                    </h5>
+
+                    <p>
+
+                        <strong>Name:</strong>
+
+                        @Model.Customer?.FullName
+
+                    </p>
+
+                    <p>
+
+                        <strong>Phone:</strong>
+
+                        @Model.PhoneNumber
+
+                    </p>
+
+                    <p>
+
+                        <strong>Address:</strong>
+
+                        @Model.DeliveryAddress
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <h5 class="fw-bold text-warning">
+
+                        🛵 Rider Information
+
+                    </h5>
+
+                    <p>
+
+                        <strong>Name:</strong>
+
+                        @(Model.DeliveryRider?.User?.FullName ?? "Assigned Rider")
+
+                    </p>
+
+                    <p>
+
+                        <strong>Delivery Status:</strong>
+
+                        <span class="badge bg-success fs-6">
+
+                            ✔ DELIVERY COMPLETED
+
+                        </span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <!-- RESTAURANT -->
+
+            <h5 class="fw-bold mb-3">
+
+                🏪 Restaurant
+
+            </h5>
+
+            <p>
+
+                @(Model.OrderItems.FirstOrDefault()?.
+                    FoodItem?.
+                    Restaurant?.
+                    Name ?? "Restaurant unavailable")
+
+            </p>
+
+            <hr />
+
+            <!-- ORDER ITEMS -->
+
+            <h5 class="fw-bold mb-3">
+
+                🍽 Ordered Items
+
+            </h5>
+
+            <table class="table table-bordered">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Food</th>
+
+                        <th class="text-center">Qty</th>
+
+                        <th class="text-end">Price</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.OrderItems)
+                    {
+
+                        <tr>
+
+                            <td>
+
+                                @item.FoodItem?.Name
+
+                            </td>
+
+                            <td class="text-center">
+
+                                @item.Quantity
+
+                            </td>
+
+                            <td class="text-end">
+
+                                ₦@((item.Quantity * item.Price).ToString("N0"))
+
+                            </td>
+
+                        </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+            <hr />
+
+            <!-- PAYMENT SUMMARY -->
+
+            <div class="row mt-4">
+
+                <div class="col-md-7">
+
+                    <h4 class="fw-bold text-primary">
+
+                        💳 Payment Summary
+
+                    </h4>
+
+                    <table class="table table-borderless">
+
+                        <tr>
+
+                            <td>
+
+                                🍔 Food Total
+
+                            </td>
+
+                            <td class="text-end fw-bold">
+
+                                ₦@Model.SubTotal.ToString("N0")
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+
+                                🛵 Delivery Fee
+
+                            </td>
+
+                            <td class="text-end fw-bold">
+
+                                ₦@Model.DeliveryFee.ToString("N0")
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+
+                                Discount
+
+                            </td>
+
+                            <td class="text-end">
+
+                                ₦0
+
+                            </td>
+
+                        </tr>
+
+                        <tr class="border-top">
+
+                            <th>
+
+                                Grand Total
+
+                            </th>
+
+                            @if (Model.PaymentMethod == "Cash on Delivery")
+                            {
+                                <div class="alert alert-warning mt-3">
+
+                                    💵 Customer paid cash upon successful delivery.
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-success mt-3">
+
+                                    ✅ Payment was completed online before delivery.
+
+                                </div>
+                            }
+
+                            <th class="text-end text-success fs-4">
+
+                                ₦@Model.TotalAmount.ToString("N0")
+
+                            </th>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <div class="col-md-5">
+
+                    <div class="card border-0 shadow-sm">
+
+                        <div class="card-body text-center">
+
+                            <h5 class="fw-bold">
+
+                                Payment Method
+
+                            </h5>
+
+                            @if (Model.PaymentMethod == "Cash on Delivery")
+                            {
+
+                                <span class="badge bg-warning text-dark fs-6">
+
+                                    💵 Cash on Delivery
+
+                                </span>
+
+                            }
+                            else
+                            {
+
+                                <span class="badge bg-success fs-6">
+
+                                    💳 Paid Online
+
+                                </span>
+
+                            }
+
+                            <hr />
+
+                            <h5 class="fw-bold">
+
+                                Payment Status
+
+                            </h5>
+
+                            @if (Model.IsPaid)
+                            {
+
+                                <span class="badge bg-success fs-6">
+
+                                    ✔ PAID
+
+                                </span>
+
+                            }
+                            else
+                            {
+
+                                <span class="badge bg-danger fs-6">
+
+                                    Pending
+
+                                </span>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <hr />
+
+            <!-- FOOTER -->
+
+            <div class="text-center">
+
+                <div class="mt-5">
+
+                    <hr class="border-2 border-success" />
+
+                    <div class="text-center">
+
+                        <h4 class="fw-bold text-success">
+
+                            🍔 Thank You for Choosing Food Xpress
+
+                        </h4>
+
+                        <p class="text-muted mb-1">
+
+                            Fast • Fresh • Delivered
+
+                        </p>
+
+                        <small class="text-muted">
+
+                            Your satisfaction is our priority.
+
+                        </small>
+
+                    </div>
+
+                    <div class="row mt-4">
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted">
+
+                                Receipt No:
+
+                                <strong>
+
+                                    RCP-@Model.Id.ToString("D6")
+
+                                </strong>
+
+                            </small>
+
+                            <br />
+
+                            <small class="text-muted">
+
+                                Generated:
+
+                                @DateTime.Now.ToString("dd MMM yyyy hh:mm tt")
+
+                            </small>
+
+                        </div>
+
+                        <div class="col-md-6 text-end">
+
+                            <small class="text-muted">
+
+                                Support
+
+                            </small>
+
+                            <br />
+
+                            <strong>
+
+                                support@Food Xpress.com
+
+                            </strong>
+
+                            <br />
+
+                            <small>
+
+                                +234 906 327 0762
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <p class="text-muted">
+
+                    Generated on
+
+                    @DateTime.Now.ToString("dd MMM yyyy hh:mm:ss")
+
+                </p>
+
+                <button onclick="window.print()"
+                        class="btn btn-success btn-lg px-5">
+
+                    🖨 Print Receipt
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    @@media print {
+        /* Hide navigation */
+
+        nav {
+            display: none !important;
+        }
+        /* Hide footer */
+
+        footer {
+            display: none !important;
+        }
+        /* Hide print button */
+
+        button {
+            display: none !important;
+        }
+        /* Remove page background */
+
+        body {
+            background: white !important;
+        }
+        /* Remove card shadow */
+
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        /* Full width */
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+
+</style>
+
+<script>
+
+    window.onafterprint=function(){
+
+        console.log("Receipt Printed Successfully");
+
+    }
+
+</script>

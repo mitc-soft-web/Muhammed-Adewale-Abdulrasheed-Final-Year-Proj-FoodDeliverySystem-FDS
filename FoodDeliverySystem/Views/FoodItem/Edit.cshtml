@@ -1,0 +1,88 @@
+﻿@model FoodDeliverySystem.ViewModels.FoodItemViewModel
+
+@{
+    ViewData["Title"] = "Edit Food Item";
+}
+
+<h1>Edit Food Item</h1>
+
+<form asp-action="Edit"
+      method="post"
+      enctype="multipart/form-data">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Category</label>
+        <select asp-for="FoodCategoryId"
+                asp-items="ViewBag.FoodCategories"
+                class="form-control">
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Restaurant</label>
+        <select asp-for="RestaurantId"
+                asp-items="ViewBag.Restaurants"
+                class="form-control">
+        </select>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsAvailable"
+               class="form-check-input" />
+
+        <label asp-for="IsAvailable"
+               class="form-check-label">
+            Available
+        </label>
+    </div>
+
+    <div class="form-check mt-3">
+
+        <input asp-for="IsFeatured"
+               class="form-check-input" />
+
+        <label asp-for="IsFeatured"
+               class="form-check-label">
+
+            Show on Homepage
+
+        </label>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="ImageFile"
+               class="form-label">
+            Food Image
+        </label>
+
+        <input asp-for="ImageFile"
+               type="file"
+               class="form-control"
+               accept="image/*" />
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Update
+    </button>
+
+</form>

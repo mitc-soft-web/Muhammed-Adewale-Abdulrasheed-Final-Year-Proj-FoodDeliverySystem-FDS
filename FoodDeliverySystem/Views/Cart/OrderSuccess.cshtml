@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Order Successful";
+}
+
+<div class="container text-center mt-5">
+
+    <div class="card shadow-lg p-5">
+
+        <h1 class="text-success">
+            🎉 Order Placed Successfully!
+        </h1>
+
+        <hr />
+
+        <p class="lead">
+            Thank you for your order.
+        </p>
+
+        <p>
+            Your order has been received and is awaiting processing.
+        </p>
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-primary btn-lg mt-3">
+
+            Continue Shopping
+
+        </a>
+
+    </div>
+
+</div>

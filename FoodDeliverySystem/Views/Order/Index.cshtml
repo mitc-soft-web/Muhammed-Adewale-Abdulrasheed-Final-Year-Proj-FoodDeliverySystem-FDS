@@ -1,0 +1,619 @@
+﻿@model IEnumerable<FoodDeliverySystem.Models.Order>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+}
+
+<div class="container">
+
+    <div class="admin-orders-header">
+
+        <div>
+
+            <h1 class="admin-page-title">
+
+                <i class="bi bi-receipt-cutoff me-2"></i>
+
+                Orders Management
+
+            </h1>
+
+            <p class="admin-page-subtitle">
+                Monitor and manage every customer order on Food Xpress.
+            </p>
+
+        </div>
+
+        <a asp-action="ExportOrders"
+           asp-controller="Order"
+           class="admin-add-card">
+
+            <div class="admin-add-icon">
+
+                <i class="bi bi-download"></i>
+
+            </div>
+
+            <div>
+
+                <h5>Export Orders</h5>
+
+                <small>Download report</small>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="admin-stats-grid">
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+
+                <i class="bi bi-box-seam"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.TotalOrders</h2>
+
+                <span>Total Orders</span>
+
+            </div>
+
+        </div>
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon warning">
+
+                <i class="bi bi-hourglass-split"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.PendingOrders</h2>
+
+                <span>Pending</span>
+
+            </div>
+
+        </div>
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon info">
+
+                <i class="bi bi-fire"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.PreparingOrders</h2>
+
+                <span>Preparing</span>
+
+            </div>
+
+        </div>
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon purple">
+
+                <i class="bi bi-bicycle"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.DeliveryOrders</h2>
+
+                <span>Out for Delivery</span>
+
+            </div>
+
+        </div>
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon success">
+
+                <i class="bi bi-check-circle"></i>
+
+            </div>
+
+            <div>
+
+                <h2>@ViewBag.DeliveredOrders</h2>
+
+                <span>Delivered</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <form method="get" asp-action="Index">
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-lg-5">
+
+                        <label class="form-label fw-semibold">
+                            Search Orders
+                        </label>
+
+                        <input type="text"
+                               name="search"
+                               value="@Context.Request.Query["search"]"
+                               class="form-control"
+                               placeholder="Order ID, Customer, Rider or Phone..." />
+
+                    </div>
+
+                    <div class="col-lg-3">
+
+                        <label class="form-label fw-semibold">
+                            Status
+                        </label>
+
+                        <select name="status" class="form-select">
+
+                            <option value=""
+                                    selected="@(string.IsNullOrEmpty(ViewBag.Status) ? "selected" : null)">
+                                All Orders
+                            </option>
+
+                            <option value="Pending"
+                                    selected="@(ViewBag.Status == "Pending" ? "selected" : null)">
+                                Pending
+                            </option>
+
+                            <option value="Preparing"
+                                    selected="@(ViewBag.Status == "Preparing" ? "selected" : null)">
+                                Preparing
+                            </option>
+
+                            <option value="Out for Delivery"
+                                    selected="@(ViewBag.Status == "Out for Delivery" ? "selected" : null)">
+                                Out for Delivery
+                            </option>
+
+                            <option value="Delivered"
+                                    selected="@(ViewBag.Status == "Delivered" ? "selected" : null)">
+                                Delivered
+                            </option>
+
+                            <option value="Cancelled"
+                                    selected="@(ViewBag.Status == "Cancelled" ? "selected" : null)">
+                                Cancelled
+                            </option>
+
+                            <option value="Payment Failed"
+                                    selected="@(ViewBag.Status == "Payment Failed" ? "selected" : null)">
+                                Payment Failed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-lg-2">
+
+                        <label class="form-label fw-semibold">
+                            Date
+                        </label>
+
+                        <select name="dateFilter" class="form-select">
+
+                            <option value="">All Time</option>
+
+                            <option value="Today"
+                                    selected="@(ViewBag.DateFilter == "Today" ? "selected" : null)">
+                                Today
+                            </option>
+
+                            <option value="Last7Days"
+                                    selected="@(ViewBag.DateFilter == "Last7Days" ? "selected" : null)">
+                                Last 7 Days
+                            </option>
+
+                            <option value="ThisMonth"
+                                    selected="@(ViewBag.DateFilter == "ThisMonth" ? "selected" : null)">
+                                This Month
+                            </option>
+
+                            <option value="ThisYear"
+                                    selected="@(ViewBag.DateFilter == "ThisYear" ? "selected" : null)">
+                                This Year
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-lg-2">
+
+                        <button class="btn btn-warning w-100">
+
+                            <i class="bi bi-search me-2"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-lg-2">
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary w-100">
+
+                            Reset
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info shadow-sm">
+            No customer orders have been placed yet.
+        </div>
+    }
+
+    else
+    {
+        <div class="orders-grid">
+
+            @foreach (var order in Model)
+            {
+                @if (order == null)
+                {
+                    continue;
+                }
+
+                <div class="order-card">
+
+                    <div class="order-header">
+
+                        <div class="order-header-left">
+
+                            <div class="order-id-row">
+
+                                <div class="order-id">
+                                    #@order.Id
+                                </div>
+
+                                <div class="order-status">
+
+                                    @if (order.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (order.Status == "Preparing")
+                                    {
+                                        <span class="badge bg-info">Preparing</span>
+                                    }
+                                    else if (order.Status == "Ready for Pickup")
+                                    {
+                                        <span class="badge bg-primary">Ready for Pickup</span>
+                                    }
+                                    else if (order.Status == "Out for Delivery")
+                                    {
+                                        <span class="badge bg-secondary">Out for Delivery</span>
+                                    }
+                                    else if (order.Status == "Delivered")
+                                    {
+                                        <span class="badge bg-success">Delivered</span>
+                                    }
+                                    else if (order.Status == "Cancelled")
+                                    {
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    }
+                                    else if (order.Status == "Payment Failed")
+                                    {
+                                        <span class="badge bg-danger">Payment Failed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-dark">@order.Status</span>
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-wrapper">
+
+                        <div class="timeline">
+
+                            @{
+                                bool pending = true;
+                                bool preparing = order.Status == "Preparing" || order.Status == "Ready for Pickup" || order.Status == "Out for Delivery" || order.Status == "Delivered";
+                                bool assigned = order.Status == "Ready for Pickup" || order.Status == "Out for Delivery" || order.Status == "Delivered";
+                                bool route = order.Status == "Out for Delivery" || order.Status == "Delivered";
+                                bool delivered = order.Status == "Delivered";
+                            }
+
+                            <div class="step">
+                                <div class="circle @(pending ? "done" : "") bg-warning">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <span>Pending</span>
+                            </div>
+
+                            <div class="line @(preparing ? "active" : "")"></div>
+
+                            <div class="step">
+                                <div class="circle @(preparing ? "done" : "") bg-info">
+                                    <i class="bi bi-fire"></i>
+                                </div>
+                                <span>Preparing</span>
+                            </div>
+
+                            <div class="line @(assigned ? "active" : "")"></div>
+
+                            <div class="step">
+                                <div class="circle @(assigned ? "done" : "") bg-primary">
+                                    <i class="bi bi-person-check"></i>
+                                </div>
+                                <span>Assigned</span>
+                            </div>
+
+                            <div class="line @(route ? "active" : "")"></div>
+
+                            <div class="step">
+                                <div class="circle @(route ? "delivery" : "") bg-secondary">
+                                    <i class="bi bi-bicycle"></i>
+                                </div>
+                                <span>On Route</span>
+                            </div>
+
+                            <div class="line @(delivered ? "active" : "")"></div>
+
+                            <div class="step">
+                                <div class="circle @(delivered ? "done" : "") bg-success">
+                                    <i class="bi bi-house-check"></i>
+                                </div>
+                                <span>Delivered</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="order-body">
+
+                        <!-- CUSTOMER -->
+                        <div class="info-box">
+
+                            <h6>CUSTOMER</h6>
+
+                            <h4>@order.Customer.FullName</h4>
+
+                            <p>
+                                <i class="bi bi-telephone-fill"></i>
+                                @order.PhoneNumber
+                            </p>
+
+                            <p>
+                                <i class="bi bi-geo-alt-fill text-danger"></i>
+                                @order.DeliveryAddress
+                            </p>
+
+                        </div>
+
+                        <!-- PAYMENT -->
+                        <div class="info-box">
+
+                            <h6>PAYMENT</h6>
+
+                            <div class="amount">
+                                ₦@order.TotalAmount.ToString("N0")
+                            </div>
+
+                            <div class="payment-pill">
+                                @order.PaymentMethod
+                            </div>
+
+                        </div>
+
+                        <!-- RIDER -->
+                        <div class="info-box">
+
+                            <h6>DELIVERY RIDER</h6>
+
+                            @if (order.DeliveryRider != null)
+                            {
+                                <h4 style="font-size:28px;">
+                                    @order.DeliveryRider.User.FullName
+                                </h4>
+                            }
+                            else
+                            {
+                                <span class="assignment-badge">
+                                    <i class="bi bi-person-x"></i>
+                                    No Rider Assigned
+                                </span>
+                            }
+
+                            <div class="status-row">
+
+                                <i class="bi bi-info-circle-fill text-primary"></i>
+
+                                @order.Status
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="order-footer">
+
+                        <div class="footer-left">
+
+                            <div class="footer-item">
+
+                                <i class="bi bi-clock-history text-success"></i>
+
+                                @if ((DateTime.Now - order.OrderDate).TotalMinutes < 60)
+                                {
+                                    <span>@($"{(int)(DateTime.Now - order.OrderDate).TotalMinutes} mins ago")</span>
+                                }
+                                else if ((DateTime.Now - order.OrderDate).TotalHours < 24)
+                                {
+                                    <span>@($"{(int)(DateTime.Now - order.OrderDate).TotalHours} hrs ago")</span>
+                                }
+                                else if ((DateTime.Now - order.OrderDate).TotalDays < 2)
+                                {
+                                    <span>Yesterday</span>
+                                }
+                                else
+                                {
+                                    <span>@($"{(int)(DateTime.Now - order.OrderDate).TotalDays} days ago")</span>
+                                }
+
+                            </div>
+
+                            <div class="footer-item">
+
+                                <i class="bi bi-calendar3"></i>
+
+                                <span>@order.OrderDate.ToString("dd MMM yyyy")</span>
+
+                            </div>
+
+                            <div class="footer-item">
+
+                                <i class="bi bi-bag-fill text-warning"></i>
+
+                                @if (order.OrderItems != null && order.OrderItems.Any())
+                                {
+                                    <span><strong>@order.OrderItems.Sum(x => x.Quantity)</strong> Item(s)</span>
+                                }
+                                else
+                                {
+                                    <span>Items unavailable</span>
+                                }
+
+                            </div>
+
+                        </div>
+
+                        <div class="footer-right">
+
+                            <a asp-action="AdminDetails"
+                               asp-route-id="@order.Id"
+                               class="btn btn-primary">
+
+                                <i class="bi bi-eye me-2"></i>
+
+                                View Order
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
+
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav class="mt-4">
+
+        <ul class="pagination justify-content-center">
+
+            <!-- Previous -->
+
+            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(ViewBag.CurrentPage - 1)"
+                   asp-route-search="@ViewBag.Search"
+                   asp-route-status="@ViewBag.Status"
+                   asp-route-dateFilter="@ViewBag.DateFilter">
+
+                    <i class="bi bi-chevron-left"></i>
+
+                </a>
+
+            </li>
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-search="@ViewBag.Search"
+                       asp-route-status="@ViewBag.Status"
+                       asp-route-dateFilter="@ViewBag.DateFilter">
+
+                        @i
+
+                    </a>
+
+                </li>
+            }
+
+            <!-- Next -->
+
+            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(ViewBag.CurrentPage + 1)"
+                   asp-route-search="@ViewBag.Search"
+                   asp-route-status="@ViewBag.Status"
+                   asp-route-dateFilter="@ViewBag.DateFilter">
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+}

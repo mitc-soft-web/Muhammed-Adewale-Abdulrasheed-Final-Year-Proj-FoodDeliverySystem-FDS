@@ -1,0 +1,74 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using FoodDeliverySystem.Data
+@using FoodDeliverySystem.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject ApplicationDbContext Context
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    int cartCount = 0;
+
+    if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        var user = await UserManager.GetUserAsync(User);
+
+        if (user != null)
+        {
+            cartCount = await Context.CartItems
+                .Where(c => c.Cart.UserId == user.Id)
+                .SumAsync(c => (int?)c.Quantity) ?? 0;
+        }
+    }
+}
+
+<ul class="navbar-nav me-auto">
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Home"
+           asp-action="Index">
+            🏠 Home
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Restaurant"
+           asp-action="Index">
+            🍽 Restaurants
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="FoodItem"
+           asp-action="Index">
+            🍔 Food Menu
+        </a>
+    </li>
+
+    <a class="nav-link"
+       asp-controller="Cart"
+       asp-action="Index">
+
+        🛒 Cart
+
+        @if (cartCount > 0)
+        {
+            <span class="badge bg-danger ms-1">
+                @cartCount
+            </span>
+        }
+
+    </a>
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Order"
+           asp-action="MyOrders">
+            📦 My Orders
+        </a>
+    </li>
+
+</ul>
