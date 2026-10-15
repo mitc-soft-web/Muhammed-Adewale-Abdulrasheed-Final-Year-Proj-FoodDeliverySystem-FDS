@@ -63,7 +63,7 @@ namespace FoodDeliverySystem
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     builder.Configuration.GetConnectionString("FDSContext"),
-                    new MySqlServerVersion(new Version(9, 0, 0))
+                    new MySqlServerVersion(new Version(8, 4, 0))
                 ));
 
             // Configure Identity
