@@ -90,11 +90,19 @@ namespace FoodDeliverySystem
 
             var app = builder.Build();
 
-            // Seed Roles
+            // Apply database migrations before seeding roles and the admin user.
             using (var scope = app.Services.CreateScope())
             {
+                var services = scope.ServiceProvider;
+
+                var dbContext =
+                    services.GetRequiredService<ApplicationDbContext>();
+
+                await dbContext.Database.MigrateAsync();
+
+                // Seed Roles
                 var roleManager =
-                    scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                    services.GetRequiredService<RoleManager<IdentityRole>>();
 
                 string[] roles =
                 {
@@ -108,12 +116,23 @@ namespace FoodDeliverySystem
                 {
                     if (!await roleManager.RoleExistsAsync(role))
                     {
-                        await roleManager.CreateAsync(new IdentityRole(role));
+                        var result = await roleManager.CreateAsync(
+                            new IdentityRole(role));
+
+                        if (!result.Succeeded)
+                        {
+                            var errors = string.Join(
+                                "; ",
+                                result.Errors.Select(error => error.Description));
+
+                            throw new InvalidOperationException(
+                                $"Failed to create role '{role}': {errors}");
+                        }
                     }
                 }
 
                 var userManager =
-                    scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    services.GetRequiredService<UserManager<ApplicationUser>>();
 
                 await FoodDeliverySystem.SeedData.AdminSeeder
                     .SeedAdminAsync(userManager);
