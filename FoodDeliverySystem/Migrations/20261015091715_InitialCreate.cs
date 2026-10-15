@@ -44,6 +44,8 @@ namespace FoodDeliverySystem.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Gender = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ProfilePicture = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Role = table.Column<string>(type: "longtext", nullable: true)
@@ -93,6 +95,31 @@ namespace FoodDeliverySystem.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Message = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Type = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Icon = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Url = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsRead = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -112,6 +139,59 @@ namespace FoodDeliverySystem.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AdminSettings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Theme = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SidebarCollapsed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    RememberSidebarState = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    NotificationsEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    NewOrderNotifications = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    RiderApplicationNotifications = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    RiderStatusNotifications = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PaymentNotifications = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    RestaurantNotifications = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    SystemNotifications = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Language = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Currency = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DateFormat = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TimeFormat = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DefaultDashboard = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ShowRestaurantCard = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ShowCategoryCard = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ShowFoodItemCard = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ShowOrderCard = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ShowRiderCard = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ShowRevenueCard = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    AutoRefreshDashboard = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ActivityTrackingEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    RememberLogin = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminSettings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AdminSettings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -146,9 +226,9 @@ namespace FoodDeliverySystem.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProviderKey = table.Column<string>(type: "varchar(255)", nullable: false)
+                    ProviderKey = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -200,9 +280,9 @@ namespace FoodDeliverySystem.Migrations
                 {
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(255)", nullable: false)
+                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Value = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
@@ -225,15 +305,15 @@ namespace FoodDeliverySystem.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CustomerId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Carts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Carts_AspNetUsers_CustomerId",
-                        column: x => x.CustomerId,
+                        name: "FK_Carts_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -250,7 +330,20 @@ namespace FoodDeliverySystem.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     VehicleType = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsAvailable = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    PlateNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DriverLicenseNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DriverLicenseImage = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProfileImage = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Address = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsAvailable = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -280,8 +373,11 @@ namespace FoodDeliverySystem.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Logo = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CoverImage = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsOpen = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    OwnerId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    OwnerId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -290,6 +386,29 @@ namespace FoodDeliverySystem.Migrations
                     table.ForeignKey(
                         name: "FK_Restaurants_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "SearchHistories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SearchText = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SearchHistories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SearchHistories_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -303,12 +422,32 @@ namespace FoodDeliverySystem.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     OrderDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EstimatedDeliveryTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    AcceptedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    PreparingAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ReadyForPickupAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    RiderAssignedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    OutForDeliveryAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    DeliveredAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    SubTotal = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    DeliveryFee = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Status = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CustomerId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DeliveryRiderId = table.Column<int>(type: "int", nullable: true)
+                    DeliveryAddress = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrderNote = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PaymentMethod = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsPaid = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    DeliveryRiderId = table.Column<int>(type: "int", nullable: true),
+                    RiderAccepted = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -364,6 +503,7 @@ namespace FoodDeliverySystem.Migrations
                     ImageUrl = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsAvailable = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     RestaurantId = table.Column<int>(type: "int", nullable: false),
                     FoodCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -397,6 +537,10 @@ namespace FoodDeliverySystem.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PaymentStatus = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    PaymentReference = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsExpired = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -417,9 +561,9 @@ namespace FoodDeliverySystem.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     CartId = table.Column<int>(type: "int", nullable: false),
-                    FoodItemId = table.Column<int>(type: "int", nullable: false)
+                    FoodItemId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -447,6 +591,7 @@ namespace FoodDeliverySystem.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     FoodItemId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -467,6 +612,12 @@ namespace FoodDeliverySystem.Migrations
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AdminSettings_UserId",
+                table: "AdminSettings",
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -516,9 +667,9 @@ namespace FoodDeliverySystem.Migrations
                 column: "FoodItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Carts_CustomerId",
+                name: "IX_Carts_UserId",
                 table: "Carts",
-                column: "CustomerId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeliveryRiders_UserId",
@@ -568,12 +719,21 @@ namespace FoodDeliverySystem.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_RiderLocations_DeliveryRiderId",
                 table: "RiderLocations",
-                column: "DeliveryRiderId");
+                column: "DeliveryRiderId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SearchHistories_UserId",
+                table: "SearchHistories",
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AdminSettings");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -593,6 +753,9 @@ namespace FoodDeliverySystem.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
@@ -600,6 +763,9 @@ namespace FoodDeliverySystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "RiderLocations");
+
+            migrationBuilder.DropTable(
+                name: "SearchHistories");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

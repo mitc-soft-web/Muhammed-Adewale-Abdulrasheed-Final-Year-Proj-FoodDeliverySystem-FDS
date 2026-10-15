@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodDeliverySystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260625135322_MakeRestaurantOwnerNullable")]
-    partial class MakeRestaurantOwnerNullable
+    [Migration("20261015091715_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,110 @@ namespace FoodDeliverySystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("FoodDeliverySystem.Models.AdminSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("ActivityTrackingEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("AutoRefreshDashboard")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DateFormat")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DefaultDashboard")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("NewOrderNotifications")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("NotificationsEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("PaymentNotifications")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RememberLogin")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RememberSidebarState")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RestaurantNotifications")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RiderApplicationNotifications")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RiderStatusNotifications")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowCategoryCard")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowFoodItemCard")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowOrderCard")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowRestaurantCard")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowRevenueCard")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowRiderCard")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("SidebarCollapsed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("SystemNotifications")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Theme")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TimeFormat")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("AdminSettings");
+                });
 
             modelBuilder.Entity("FoodDeliverySystem.Models.ApplicationUser", b =>
                 {
@@ -49,6 +153,9 @@ namespace FoodDeliverySystem.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Gender")
                         .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
@@ -110,13 +217,13 @@ namespace FoodDeliverySystem.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CustomerId")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Carts");
                 });
@@ -155,8 +262,33 @@ namespace FoodDeliverySystem.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DriverLicenseImage")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DriverLicenseNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("PlateNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -211,6 +343,9 @@ namespace FoodDeliverySystem.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -231,6 +366,45 @@ namespace FoodDeliverySystem.Migrations
                     b.ToTable("FoodItems");
                 });
 
+            modelBuilder.Entity("FoodDeliverySystem.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("FoodDeliverySystem.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -239,19 +413,70 @@ namespace FoodDeliverySystem.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("AcceptedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("CustomerId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<DateTime?>("DeliveredAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("DeliveryFee")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<int?>("DeliveryRiderId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("EstimatedDeliveryTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("OrderNote")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("OutForDeliveryAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("PreparingAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("ReadyForPickupAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("RiderAccepted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("RiderAssignedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(65,30)");
@@ -285,6 +510,9 @@ namespace FoodDeliverySystem.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(65,30)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FoodItemId");
@@ -305,6 +533,12 @@ namespace FoodDeliverySystem.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -313,6 +547,9 @@ namespace FoodDeliverySystem.Migrations
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PaymentReference")
                         .HasColumnType("longtext");
 
                     b.Property<string>("PaymentStatus")
@@ -337,6 +574,12 @@ namespace FoodDeliverySystem.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<string>("CoverImage")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
@@ -388,9 +631,37 @@ namespace FoodDeliverySystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeliveryRiderId");
+                    b.HasIndex("DeliveryRiderId")
+                        .IsUnique();
 
                     b.ToTable("RiderLocations");
+                });
+
+            modelBuilder.Entity("FoodDeliverySystem.Models.SearchHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("SearchText")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SearchHistories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -529,15 +800,26 @@ namespace FoodDeliverySystem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FoodDeliverySystem.Models.Cart", b =>
+            modelBuilder.Entity("FoodDeliverySystem.Models.AdminSettings", b =>
                 {
-                    b.HasOne("FoodDeliverySystem.Models.ApplicationUser", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
+                    b.HasOne("FoodDeliverySystem.Models.ApplicationUser", "User")
+                        .WithOne()
+                        .HasForeignKey("FoodDeliverySystem.Models.AdminSettings", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FoodDeliverySystem.Models.Cart", b =>
+                {
+                    b.HasOne("FoodDeliverySystem.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FoodDeliverySystem.Models.CartItem", b =>
@@ -648,12 +930,23 @@ namespace FoodDeliverySystem.Migrations
             modelBuilder.Entity("FoodDeliverySystem.Models.RiderLocation", b =>
                 {
                     b.HasOne("FoodDeliverySystem.Models.DeliveryRider", "DeliveryRider")
-                        .WithMany()
-                        .HasForeignKey("DeliveryRiderId")
+                        .WithOne("RiderLocation")
+                        .HasForeignKey("FoodDeliverySystem.Models.RiderLocation", "DeliveryRiderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DeliveryRider");
+                });
+
+            modelBuilder.Entity("FoodDeliverySystem.Models.SearchHistory", b =>
+                {
+                    b.HasOne("FoodDeliverySystem.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -710,6 +1003,11 @@ namespace FoodDeliverySystem.Migrations
             modelBuilder.Entity("FoodDeliverySystem.Models.Cart", b =>
                 {
                     b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("FoodDeliverySystem.Models.DeliveryRider", b =>
+                {
+                    b.Navigation("RiderLocation");
                 });
 
             modelBuilder.Entity("FoodDeliverySystem.Models.FoodCategory", b =>
